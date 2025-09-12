@@ -1,22 +1,22 @@
-import { model, Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 import { TUser } from "./user.interface";
 
-const user_schema = new Schema<TUser>({
-    name: { type: String, required: true },
-    photo: { type: String, required: false },
-    accountId: { type: String, required: false, ref: "account" },
-    address: {
-        location: { type: String },
-        city: { type: String },
-        state: { type: String },
-        postCode: { type: String },
-        country: { type: String },
-        timeZone: { type: String }
-    }
-}, {
-    versionKey: false,
-    timestamps: true
-})
+const UserSchema = new Schema<TUser>(
+    {
+        ownerId: { type: Schema.Types.ObjectId, ref: "account", required: true },
+        email: { type: String, required: true, unique: true },
+        firstName: { type: String, required: true },
+        lastName: { type: String, required: true },
+        password: { type: String, required: true },
+        userType: {
+            type: String,
+            enum: ["GUEST", "LITE SEATS", "FULL ACCESS"],
+            required: true,
+        },
+        joinedGroups: [{ type: Schema.Types.ObjectId, ref: "group" }],
+        joinedSites: [{ type: Schema.Types.ObjectId, ref: "site" }],
+    },
+    { timestamps: true, versionKey: false }
+);
 
-
-export const User_Model = model("user", user_schema)
+export const UserModel = model<TUser>("user", UserSchema);

@@ -1,0 +1,17 @@
+import { Schema, model } from "mongoose";
+import { TAction } from "./action.interface";
+
+const ActionSchema = new Schema<TAction>(
+    {
+        index: { type: String, required: true },
+        author: { type: Schema.Types.ObjectId, ref: "Account", required: true },
+        actionTitle: { type: String, required: true },
+        actionDisc: { type: String },
+        priority: { type: String, enum: ["LOW", "MEDIUM", "HIGH"], required: true },
+        dueDate: { type: String, required: true }, // keep as string like your type
+        assignBy: { type: Schema.Types.ObjectId, ref: "user" },
+    },
+    { timestamps: true, versionKey: false }
+);
+
+export const ActionModel = model<TAction>("action", ActionSchema);

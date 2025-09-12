@@ -6,12 +6,12 @@ export type TAccount = {
     accountStatus?: "ACTIVE" | "INACTIVE" | "SUSPENDED";
     role?: "USER" | "ADMIN",
     isVerified?: boolean,
-}
+    _id: string;
+    fullName: string;
+    mobileNo?: string;
+    profilePhoto?: string;
+};
 
-
-export interface TRegisterPayload extends TAccount {
-    name: string
-}
 
 export type TLoginPayload = {
     email: string;

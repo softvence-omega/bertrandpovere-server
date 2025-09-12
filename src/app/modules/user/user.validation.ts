@@ -1,18 +1,18 @@
 import { z } from "zod";
 
-const update_user = z.object({
-    name: z.string().optional(),
-    photo: z.string().optional(),
-    address: z.object({
-        location: z.string().optional(),
-        city: z.string().optional(),
-        state: z.string().optional(),
-        postCode: z.string().optional(),
-        country: z.string().optional(),
-        timeZone: z.string().optional(),
-    }).optional()
-})
+const create = z.object({
+    ownerId: z.string(),
+    email: z.string().email(),
+    firstName: z.string().min(1),
+    lastName: z.string().min(1),
+    password: z.string().min(6), // can adjust depending on policy
+    userType: z.enum(["GUEST", "LITE SEATS", "FULL ACCESS"]),
+    joinedGroups: z.array(z.string()).default([]),
+    joinedSites: z.array(z.string()).default([]),
+});
 
-export const user_validations = {
-    update_user
+
+
+export const user_validation = {
+    create
 }
