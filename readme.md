@@ -13,6 +13,7 @@ Live URL: *https://*
     - [Action Model](#action-model)
     - [User Model](#user-model)
     - [Group Model](#group-model)
+    - [Site Model](#site-model)
 
 
 
@@ -130,6 +131,21 @@ type TGroup = {
     groupName: string;
     groupAvatar?: string;
     joinedUser?: Types.ObjectId[];
+    createdAt: string; // ISO string
+    updatedAt: string; // ISO string
+}
+```
+
+### Site Model
+```ts
+type TSite = {
+    _id:Types.ObjectId;
+    ownerId: Types.ObjectId;
+    siteName: string;
+    siteAvatar?: string;
+    joinedUsers?: Types.ObjectId[];
+    inspections?: Types.ObjectId[];
+    actions?: Types.ObjectId[];
     createdAt: string; // ISO string
     updatedAt: string; // ISO string
 }
