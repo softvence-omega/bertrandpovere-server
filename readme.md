@@ -1,6 +1,6 @@
 # Project Name : `bertrandpovere`
 
-Live URL: *https://*
+Base URL: *http://localhost:5000/api*
 
 ---
 
@@ -16,6 +16,9 @@ Live URL: *https://*
     - [Site Model](#site-model)
     - [Organization Model](#organization-model)
 - [API Endpoints](#api-endpoints)
+    - [Authentication Endpoints](#auth-endpoints)
+        - [Organization Register](#organization-register)
+        - [Organization Login](#organization-login)
 
 
 
@@ -182,3 +185,70 @@ export type TOrganization = {
 
 ## 🚀 API Endpoints
 
+<p id="auth-endpoints"> </p>
+
+### 🔐 Authentication
+
+
+
+<p id="organization-register"> </p>
+
+#### Register Organization - (POST) - `/auth/organization-register`
+`Headers` - Content-Type: application/json <br/>
+`Request Body`
+```json
+{
+    "firstName": "Abumahid",
+    "lastName":"Islam",
+    "email": "dev.abumahid@gmail.com",
+    "password": "123456"
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Organization created successful",
+    "data": [
+        {
+            "email": "dev.abumahid@gmail.com",
+            "password": "$2b$10$9HqSx8exluO4dlv8x/2HA.GQwNVtN0neqd.WZNhMyzXAs1WHghOLO",
+            "isDeleted": false,
+            "accountStatus": "ACTIVE",
+            "role": "ADMIN",
+            "firstName": "Abumahid",
+            "lastName": "Islam",
+            "_id": "68c52ee7720a2d3552e68d78",
+            "createdAt": "2025-09-13T08:44:23.793Z",
+            "updatedAt": "2025-09-13T08:44:23.793Z"
+        }
+    ],
+    "meta": null
+}
+```
+
+
+<p id="organization-login"> </p>
+
+#### Organization Login - (POST) - `/auth/organization-login`
+`Headers` - Content-Type: application/json <br/>
+`Request Body`
+```json
+{
+    "email":"dev.abumahid@gmail.com",
+    "password":"123456"
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Organization log in successful !",
+    "data": {
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRldi5hYnVtYWhpZEBnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTc3NTM0MTgsImV4cCI6MTc1ODM1ODIxOH0.BelFM9ii7-t_cUPouZEMXd6e2mxaAYjZl2I_zKzm06Q",
+        "role": "ADMIN"
+    },
+    "meta": null
+}
+```
+`Note That` : accessToken and refreshToken are stored in cookies. You can pass it on headers. When you pass cookies on headers on this time you don't need to authorization header. It will managed automatically using cookie.
