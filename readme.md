@@ -351,8 +351,8 @@ export type TOrganization = {
 `Request Body`
 ```json
 {
-    "email":"dev.abumahid@gmail.com", // come form email link you get get using useParams hook on react
-    "token":"string", // come form email link you get get using useParams hook on react
+    "email":"dev.abumahid@gmail.com", // come form email link you get using useParams hook on react
+    "token":"string", // come form email link you get using useParams hook on react
     "newPassword":"111111"  
 }
 ```
