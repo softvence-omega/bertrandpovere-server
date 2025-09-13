@@ -1,6 +1,8 @@
 # Project Name : `bertrandpovere`
 
-Base URL: *http://localhost:5000/api*
+Base URL: *https://bertrandpovere-server.onrender.com/api*
+
+`You can check all including endpoints with this api link`
 
 ---
 
