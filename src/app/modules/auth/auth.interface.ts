@@ -3,14 +3,14 @@ import { Types } from "mongoose";
 export type TAccount = {
     email: string;
     password: string;
-    lastPasswordChange?: Date;
     isDeleted?: boolean;
     accountStatus?: "ACTIVE" | "INACTIVE" | "SUSPENDED";
     role?: "USER" | "ADMIN",
-    fullName: string;
+    firstName: string;
+    lastName?:string;
     mobileNo?: string;
     profilePhoto?: string;
-    organization: Types.ObjectId;
+    organization?: Types.ObjectId;
 };
 
 

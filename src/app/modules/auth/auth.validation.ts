@@ -4,7 +4,9 @@ import { z } from "zod";
 const register_validation = z.object({
     email: z.string({ message: "Email is required" }).email(),
     password: z.string({ message: "Password is required" }),
-    name: z.string({ message: "Name is required" })
+    firstName: z.string({ message: "First name is required" }),
+    lastName: z.string({ message: "Last name is required" }),
+    mobileNo: z.string().optional()
 });
 
 const login_validation = z.object({

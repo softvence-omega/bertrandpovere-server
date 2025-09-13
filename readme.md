@@ -15,6 +15,7 @@ Live URL: *https://*
     - [Group Model](#group-model)
     - [Site Model](#site-model)
     - [Organization Model](#organization-model)
+- [API Endpoints](#api-endpoints)
 
 
 
@@ -26,12 +27,12 @@ type TAccount = {
     _id: string;
     email: string;
     password: string;
-    lastPasswordChange?: Date;
     isDeleted?: boolean;
     accountStatus?: "ACTIVE" | "INACTIVE" | "SUSPENDED";
     role: "USER" | "ADMIN",
     isVerified: boolean,
-    fullName: string;
+    firstName: string;
+    lastName?:string;
     mobileNo?: string;
     profilePhoto?: string;
     organization: Types.ObjectId;
@@ -172,3 +173,12 @@ export type TOrganization = {
     updatedAt: string; // ISO string
 }
 ```
+
+
+
+
+
+<p id="api-endpoints"> </p>
+
+## 🚀 API Endpoints
+

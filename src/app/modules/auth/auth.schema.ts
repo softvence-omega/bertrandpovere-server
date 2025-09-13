@@ -5,14 +5,14 @@ import { TAccount } from "./auth.interface";
 const authSchema = new Schema<TAccount>({
     email: { type: String, required: true },
     password: { type: String, required: true },
-    lastPasswordChange: { type: String },
     isDeleted: { type: Boolean, default: false },
     accountStatus: { type: String, default: "ACTIVE" },
     role: { type: String, default: "USER" },
-    fullName: { type: String, required: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: false },
     mobileNo: { type: String, required: false },
     profilePhoto: { type: String, required: false },
-    organization: { type: Schema.ObjectId, required: false ,ref:"organization"},
+    organization: { type: Schema.ObjectId, required: false, ref: "organization" },
 }, {
     versionKey: false,
     timestamps: true

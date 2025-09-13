@@ -1,79 +1,60 @@
-import { AppError } from "../../utils/app_error";
-import { TAccount, TLoginPayload, TRegisterPayload } from "./auth.interface";
-import { Account_Model } from "./auth.schema";
-import httpStatus from 'http-status';
 import bcrypt from "bcrypt";
-import { TUser } from "../user/user.interface";
-import { User_Model } from "../user/user.schema";
-import mongoose from "mongoose";
-import { jwtHelpers } from "../../utils/JWT";
-import { configs } from "../../configs";
+import httpStatus from 'http-status';
 import { JwtPayload, Secret } from "jsonwebtoken";
-import sendMail from "../../utils/mail_sender";
+import mongoose from "mongoose";
+import { configs } from "../../configs";
+import { AppError } from "../../utils/app_error";
 import { isAccountExist } from "../../utils/isAccountExist";
+import { jwtHelpers } from "../../utils/JWT";
+import sendMail from "../../utils/mail_sender";
+import { TOrganization } from "../organization/organization.interface";
+import { OrganizationModel } from "../organization/organization.schema";
+import { TAccount, TLoginPayload } from "./auth.interface";
+import { Account_Model } from "./auth.schema";
+
+
 // register user
-const register_user_into_db = async (payload: TRegisterPayload) => {
+const register_user_into_db = async (payload: any) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
         // Check if the account already exists
-        const isExistAccount = await Account_Model.findOne({ email: payload?.email },null,{ session });
+        const isExistAccount = await Account_Model.findOne({ email: payload?.email }, null, { session });
         if (isExistAccount) {
-            throw new AppError("Account already exist!!", httpStatus.BAD_REQUEST);
+            throw new AppError("Organization already exist!!", httpStatus.BAD_REQUEST);
         }
         // Hash the password
-        const hashPassword = bcrypt.hashSync(payload?.password, 10);
+        const hashPassword = bcrypt.hashSync(payload?.password as string, 10);
 
         // Create account
         const accountPayload: TAccount = {
-            email: payload.email,
+            email: payload?.email,
             password: hashPassword,
-            lastPasswordChange: new Date()
+            role: "ADMIN",
+            firstName: payload?.firstName,
+            lastName: payload?.lastName,
+            accountStatus: "ACTIVE",
+            isDeleted: false,
+            mobileNo: payload?.mobileNo,
+
         };
         const newAccount = await Account_Model.create([accountPayload], { session });
 
         // Create user
-        const userPayload: TUser = {
-            name: payload.name,
-            accountId: newAccount[0]._id,
+        const organizationPayload: TOrganization = {
+            owner: newAccount[0]?._id,
+            organizationName: `${payload?.firstName}' Organization`,
+            phoneNumber: payload?.mobileNo
         };
-        await User_Model.create([userPayload], { session });
-        // make verified link
-        const verifiedToken = jwtHelpers.generateToken(
-            {
-                email: payload?.email
-            },
-            configs.jwt.verified_token as Secret,
-            '5m'
-        );
-        const verificationLink = `${configs.jwt.front_end_url}/verified?token=${verifiedToken}`;
-        // Commit the transaction
+        const organizationRes = await OrganizationModel.create([organizationPayload], { session });
+        await Account_Model.updateOne(
+            { _id: newAccount[0]?._id },
+            { $set: { organization: organizationRes[0]?._id } },
+            { session },
+        )
         await session.commitTransaction();
-        await sendMail({
-            to: payload?.email,
-            subject: "Thanks for creating account!",
-            textBody: `New Account successfully created on ${new Date().toLocaleDateString()}`,
-            name: payload?.name,
-            htmlBody: `
-            <p>Thanks for creating an account with us. We’re excited to have you on board! Click the button below to
-                verify your email and activate your account:</p>
-
-
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="${verificationLink}" target="_blank"
-                    style="background-color: #4CAF50; color: #ffffff; padding: 14px 28px; text-decoration: none; font-weight: bold; border-radius: 5px; display: inline-block; font-size: 18px;"
-                    class="btn">
-                    Verify My Email
-                </a>
-            </div>
-
-            <p>If you did not create this account, please ignore this email.</p>
-            `
-        })
         return newAccount;
     } catch (error) {
-        console.log(error)
-        // Rollback the transaction
         await session.abortTransaction();
         throw error;
     } finally {
@@ -81,12 +62,9 @@ const register_user_into_db = async (payload: TRegisterPayload) => {
     }
 };
 
-
 // login user
-const login_user_from_db = async (payload: TLoginPayload) => {
-    // check account info 
+const organization_login_user_from_db = async (payload: TLoginPayload) => {
     const isExistAccount = await isAccountExist(payload?.email)
-
     const isPasswordMatch = await bcrypt.compare(
         payload.password,
         isExistAccount.password,
@@ -102,7 +80,6 @@ const login_user_from_db = async (payload: TLoginPayload) => {
         configs.jwt.access_token as Secret,
         configs.jwt.access_expires as string,
     );
-
     const refreshToken = jwtHelpers.generateToken(
         {
             email: isExistAccount.email,
@@ -121,7 +98,7 @@ const login_user_from_db = async (payload: TLoginPayload) => {
 
 const get_my_profile_from_db = async (email: string) => {
     const isExistAccount = await isAccountExist(email)
-    const accountProfile = await User_Model.findOne({ accountId: isExistAccount._id })
+    const accountProfile = await Account_Model.findOne({ accountId: isExistAccount._id })
     isExistAccount.password = ""
     return {
         account: isExistAccount,
@@ -291,7 +268,7 @@ const get_new_verification_link_from_db = async (email: string) => {
 
 export const auth_services = {
     register_user_into_db,
-    login_user_from_db,
+    organization_login_user_from_db,
     get_my_profile_from_db,
     refresh_token_from_db,
     change_password_from_db,
