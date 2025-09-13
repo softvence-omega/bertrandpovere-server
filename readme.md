@@ -14,6 +14,7 @@ Live URL: *https://*
     - [User Model](#user-model)
     - [Group Model](#group-model)
     - [Site Model](#site-model)
+    - [Organization Model](#organization-model)
 
 
 
@@ -33,6 +34,7 @@ type TAccount = {
     fullName: string;
     mobileNo?: string;
     profilePhoto?: string;
+    organization: Types.ObjectId;
     createdAt: string; // ISO string
     updatedAt: string; // ISO string
 };
@@ -110,7 +112,7 @@ export type TAction = {
 ```ts
 type TUser = {
     _id: Types.ObjectId;
-    ownerId: Types.ObjectId;
+    owner: Types.ObjectId;
     email: string;
     firstName: string;
     lastName: string;
@@ -118,6 +120,7 @@ type TUser = {
     userType: "GUEST" | "LITE SEATS" | "FULL ACCESS";
     joinedGroups: Types.ObjectId[];
     joinedSites: Types.ObjectId[];
+    organization: Types.ObjectId;
     createdAt: string; // ISO string
     updatedAt: string; // ISO string
 }
@@ -127,7 +130,7 @@ type TUser = {
 ```ts 
 type TGroup = {
     _id:Types.ObjectId;
-    ownerId: Types.ObjectId;
+    owner: Types.ObjectId;
     groupName: string;
     groupAvatar?: string;
     joinedUser?: Types.ObjectId[];
@@ -140,12 +143,31 @@ type TGroup = {
 ```ts
 type TSite = {
     _id:Types.ObjectId;
-    ownerId: Types.ObjectId;
+    owner: Types.ObjectId;
     siteName: string;
     siteAvatar?: string;
     joinedUsers?: Types.ObjectId[];
     inspections?: Types.ObjectId[];
     actions?: Types.ObjectId[];
+    createdAt: string; // ISO string
+    updatedAt: string; // ISO string
+}
+```
+
+### Organization Model
+```ts
+export type TOrganization = {
+    _id:Types.ObjectId;
+    organizationName: string;
+    owner: Types.ObjectId;
+    phoneNumber?: string;
+    websiteURL?: string;
+    organizationLogo?: string;
+    language: string; // default is english
+    dateFormat: "dd/mm/yyyy" | "mm/dd/yyyy" | "yyyy/mm/dd"; // default dd/mm/yyyy
+    timeFormat: "12h" | "24h";
+    temperatureUnit: "C" | "F";
+    distanceUnit: "km" | "mile" | "meter" | "feet"; // default meeter
     createdAt: string; // ISO string
     updatedAt: string; // ISO string
 }

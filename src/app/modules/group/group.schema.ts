@@ -3,7 +3,7 @@ import { TGroup } from "./group.interface";
 
 const GroupSchema = new Schema<TGroup>(
     {
-        ownerId: { type: Schema.Types.ObjectId, ref: "account", required: true },
+        owner: { type: Schema.Types.ObjectId, ref: "account", required: true },
         groupName: { type: String, required: true },
         groupAvatar: { type: String },
         joinedUser: [{ type: Schema.Types.ObjectId, ref: "user" }],

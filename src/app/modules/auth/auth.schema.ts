@@ -9,10 +9,10 @@ const authSchema = new Schema<TAccount>({
     isDeleted: { type: Boolean, default: false },
     accountStatus: { type: String, default: "ACTIVE" },
     role: { type: String, default: "USER" },
-    isVerified: { type: Boolean, default: false },
     fullName: { type: String, required: true },
     mobileNo: { type: String, required: false },
     profilePhoto: { type: String, required: false },
+    organization: { type: Schema.ObjectId, required: false ,ref:"organization"},
 }, {
     versionKey: false,
     timestamps: true

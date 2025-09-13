@@ -17,15 +17,10 @@ const register_user_into_db = async (payload: TRegisterPayload) => {
     session.startTransaction();
     try {
         // Check if the account already exists
-        const isExistAccount = await Account_Model.findOne(
-            { email: payload?.email },
-            null,
-            { session }
-        );
+        const isExistAccount = await Account_Model.findOne({ email: payload?.email },null,{ session });
         if (isExistAccount) {
             throw new AppError("Account already exist!!", httpStatus.BAD_REQUEST);
         }
-
         // Hash the password
         const hashPassword = bcrypt.hashSync(payload?.password, 10);
 

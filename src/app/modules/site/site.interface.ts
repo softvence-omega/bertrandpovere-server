@@ -1,7 +1,7 @@
 import { Types } from "mongoose"
 
 export type TSite = {
-    ownerId: Types.ObjectId;
+    owner: Types.ObjectId;
     siteName: string;
     siteAvatar?: string;
     joinedUsers?: Types.ObjectId[];

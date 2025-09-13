@@ -3,7 +3,7 @@ import { TUser } from "./user.interface";
 
 const UserSchema = new Schema<TUser>(
     {
-        ownerId: { type: Schema.Types.ObjectId, ref: "account", required: true },
+        owner: { type: Schema.Types.ObjectId, ref: "account", required: true },
         email: { type: String, required: true, unique: true },
         firstName: { type: String, required: true },
         lastName: { type: String, required: true },

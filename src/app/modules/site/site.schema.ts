@@ -4,7 +4,7 @@ import { TSite } from "./site.interface";
 
 const SiteSchema = new Schema<TSite>(
     {
-        ownerId: { type: Schema.Types.ObjectId, ref: "account", required: true },
+        owner: { type: Schema.Types.ObjectId, ref: "account", required: true },
         siteName: { type: String, required: true },
         siteAvatar: { type: String },
         joinedUsers: [{ type: Schema.Types.ObjectId, ref: "user" }],

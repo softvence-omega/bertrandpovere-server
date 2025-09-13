@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export type TAccount = {
     email: string;
     password: string;
@@ -5,11 +7,10 @@ export type TAccount = {
     isDeleted?: boolean;
     accountStatus?: "ACTIVE" | "INACTIVE" | "SUSPENDED";
     role?: "USER" | "ADMIN",
-    isVerified?: boolean,
-    _id: string;
     fullName: string;
     mobileNo?: string;
     profilePhoto?: string;
+    organization: Types.ObjectId;
 };
 
 
