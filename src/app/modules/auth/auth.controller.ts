@@ -96,26 +96,6 @@ const reset_password = catchAsync(async (req, res) => {
     });
 });
 
-const verified_account = catchAsync(async (req, res) => {
-    const result = await auth_services.verified_account_into_db(req?.body?.token)
-
-    manageResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: "Account Verification successful.",
-        data: result
-    })
-})
-
-const get_new_verification_link = catchAsync(async (req, res) => {
-    const result = await auth_services.get_new_verification_link_from_db(req?.body?.email)
-    manageResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: "New Verification link is send on email.",
-        data: result
-    })
-})
 
 export const auth_controllers = {
     register_user,
@@ -124,7 +104,5 @@ export const auth_controllers = {
     refresh_token,
     change_password,
     reset_password,
-    forget_password,
-    verified_account,
-    get_new_verification_link
+    forget_password
 }

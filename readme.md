@@ -19,6 +19,10 @@ Base URL: *http://localhost:5000/api*
     - [Authentication Endpoints](#auth-endpoints)
         - [Organization Register](#organization-register)
         - [Organization Login](#organization-login)
+        - [Get Me With Organization](#get-me-organization-profile)
+        - [Change Password](#change-password)
+        - [Forgot Password](#forgot-password)
+        - [Reset Password](#reset-password)
 
 
 
@@ -193,7 +197,7 @@ export type TOrganization = {
 
 <p id="organization-register"> </p>
 
-#### Register Organization - (POST) - `/auth/organization-register`
+#### ➡️ Register Organization - (POST) - `/auth/organization-register`
 `Headers` - Content-Type: application/json <br/>
 `Request Body`
 ```json
@@ -230,7 +234,7 @@ export type TOrganization = {
 
 <p id="organization-login"> </p>
 
-#### Organization Login - (POST) - `/auth/organization-login`
+#### ➡️ Organization Login - (POST) - `/auth/organization-login`
 `Headers` - Content-Type: application/json <br/>
 `Request Body`
 ```json
@@ -252,3 +256,112 @@ export type TOrganization = {
 }
 ```
 `Note That` : accessToken and refreshToken are stored in cookies. You can pass it on headers. When you pass cookies on headers on this time you don't need to authorization header. It will managed automatically using cookie.
+
+
+
+<p id="get-me-organization-profile"> </p>
+
+#### ➡️ Get My Profile with Organization - (GET) - `/auth/me`
+`Headers` - Authorization: accessToken needed / cookies needed <br/>
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "User profile fetched successfully!",
+    "data": {
+        "_id": "68c52ee7720a2d3552e68d78",
+        "email": "dev.abumahid@gmail.com",
+        "password": "",
+        "isDeleted": false,
+        "accountStatus": "ACTIVE",
+        "role": "ADMIN",
+        "firstName": "Abumahid",
+        "lastName": "Islam",
+        "createdAt": "2025-09-13T08:44:23.793Z",
+        "updatedAt": "2025-09-13T08:44:23.940Z",
+        "organization": {
+            "_id": "68c52ee7720a2d3552e68d7a",
+            "organizationName": "Abumahid' Organization",
+            "owner": "68c52ee7720a2d3552e68d78",
+            "language": "english",
+            "dateFormat": "dd/mm/yyyy",
+            "timeFormat": "12h",
+            "temperatureUnit": "C",
+            "distanceUnit": "meter",
+            "createdAt": "2025-09-13T08:44:23.868Z",
+            "updatedAt": "2025-09-13T08:44:23.868Z"
+        }
+    },
+    "meta": null
+}
+```
+
+
+<p id="change-password"> </p>
+
+#### ➡️ Change Password- (POST) - `/auth/change-password`
+`Headers` 
+- Content-Type: application/json
+- Authorization: accessToken / Cookies needed
+
+`Request Body`
+```json
+{
+    "oldPassword":"123456",
+    "newPassword":"000000"
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Password changed successfully!",
+    "data": "Password changed successful.",
+    "meta": null
+}
+```
+
+<p id="forgot-password"> </p>
+
+#### ➡️ Forgot Password - (POST) - `/auth/forgot-password`
+`Headers` - Content-Type: application/json <br/>
+`Request Body`
+```json
+{
+    "email":"dev.abumahid@gmail.com"
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Reset password link sent to your email!",
+    "data": null,
+    "meta": null
+}
+```
+`Note That`: An email sent to your email. Click on the link and reset your password.
+
+
+<p id="reset-password"> </p>
+
+#### ➡️ Reset Password - (POST) - `/auth/reset-password`
+`Headers` - Content-Type: application/json <br/>
+`Request Body`
+```json
+{
+    "email":"dev.abumahid@gmail.com", // come form email link you get get using useParams hook on react
+    "token":"string", // come form email link you get get using useParams hook on react
+    "newPassword":"111111"  
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Password reset successfully!",
+    "data": "Password reset successfully!",
+    "meta": null
+}
+```
