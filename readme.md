@@ -25,6 +25,15 @@ Base URL: *https://bertrandpovere-server.onrender.com/api*
         - [Change Password](#change-password)
         - [Forgot Password](#forgot-password)
         - [Reset Password](#reset-password)
+    - [Group Endpoints](#group-endpoints)
+        - [Create New Group](#create-new-group)
+        - [Get All Group](#get-all-groups)
+        - [Get Single Group](#get-single-groups)
+        - [Update Group](#update-group)
+        - [Add Member Into Group](#add-member-group)
+        - [Remove Member From Group](#remove-member-group)
+        - [Delete Group](#delete-group)
+        - [Get Joined Groups](#get-joined-groups)
 
 
 
@@ -367,3 +376,243 @@ export type TOrganization = {
     "meta": null
 }
 ```
+
+<p id="group-endpoints"> </p>
+
+## 🚀 Group Endpoints
+
+<p id="create-new-group"> </p>
+
+#### ➡️ Create New Group - (POST) - `/group`
+`Headers` 
+- Content-Type: application/json
+- Authorization: accessToken / Cookies needed
+
+
+`Request Body`
+```json
+{
+    "groupName":"Group-6",
+    "joinedUser":["68c52ee7720a2d3552e68d78"] // optional
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Group created successful",
+    "data": {
+        "groupName": "Group-6",
+        "owner": "68c52ee7720a2d3552e68d78",
+        "joinedUser":["68c52ee7720a2d3552e68d78"]
+    },
+    "meta": null
+}
+```
+
+<p id="get-all-groups"> </p>
+
+#### ➡️ Get All Group - (GET) - `/group`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`query params` 
+- page 
+- limit
+- searchTerm
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Groups fetched successfully!",
+    "data": [
+        {
+            "_id": "68c78377de30d8be0107b771",
+            "owner": "68c52ee7720a2d3552e68d78",
+            "groupName": "Group-1",
+            "joinedUser": [],
+            "createdAt": "2025-09-15T03:09:43.463Z",
+            "updatedAt": "2025-09-15T03:09:43.463Z"
+        },
+        {...}
+    ],
+    "meta": {
+        "total": 8,
+        "page": 1,
+        "limit": 10,
+        "totalPages": 1
+    }
+}
+```
+
+
+<p id="get-single-groups"> </p>
+
+#### ➡️ Get Single Group - (GET) - `/group/:groupId`
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Group fetched successfully!",
+    "data": {
+        "_id": "68c7837ede30d8be0107b77d",
+        "owner": "68c52ee7720a2d3552e68d78",
+        "groupName": "Group-4",
+        "joinedUser": [],
+        "createdAt": "2025-09-15T03:09:50.214Z",
+        "updatedAt": "2025-09-15T03:09:50.214Z"
+    },
+    "meta": null
+}
+```
+
+
+<p id="update-group"> </p>
+
+#### ➡️ Update Group - (PATCH) - `/group/:groupId`
+
+`Headers` 
+- Content-Type: multipart/form-data
+- Authorization: accessToken / Cookies needed
+
+`Request Body`
+| Field Name | Type | Example |
+| --- | --- | --- |
+| data | Object | {"groupName":"Group-4"} |
+| image | File |  any .png, .jpg, .jpeg , .webp
+
+`Response`
+```json
+
+{
+    "success": true,
+    "message": "Group update successfully!",
+    "data": {
+        "_id": "68c7837ede30d8be0107b77d",
+        "owner": "68c52ee7720a2d3552e68d78",
+        "groupName": "Group-4",
+        "joinedUser": [],
+        "createdAt": "2025-09-15T03:09:50.214Z",
+        "updatedAt": "2025-09-15T03:57:18.727Z",
+        "groupAvatar": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757908639/twmsahtvhlhw5aie50du.png"
+    },
+    "meta": null
+}
+
+```
+
+<p id="add-member-group"> </p>
+
+#### ➡️ Add Member in Group - (PUT) - `/group/:groupId`
+`Headers` 
+- Content-Type: application/json
+- Authorization: accessToken / Cookies needed
+
+`Request Body`
+```json
+{
+    "joinedUser":["68c7837ede30d8be0107b77a"]
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Group member added successfully!",
+    "data": {
+        "_id": "68c7837ede30d8be0107b77d",
+        "owner": "68c52ee7720a2d3552e68d78",
+        "groupName": "Group-4",
+        "joinedUser": [
+            "68c7837ede30d8be0107b77d",
+            "68c7837ede30d8be0107b77f",
+            "68c7837ede30d8be0107b77a"
+        ],
+        "createdAt": "2025-09-15T03:09:50.214Z",
+        "updatedAt": "2025-09-15T04:11:45.406Z",
+        "groupAvatar": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757908639/twmsahtvhlhw5aie50du.png"
+    },
+    "meta": null
+}
+```
+
+<p id="remove-member-group"> </p>
+
+#### ➡️ Remove Member from Group - (PUT) - `/group/remove/:groupId`
+`Headers` 
+- Content-Type: application/json
+- Authorization: accessToken / Cookies needed
+
+`Request Body`
+```json
+{
+    "joinedUser":["68c7837ede30d8be0107b77a"]
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Group member added successfully!",
+    "data": {
+        "_id": "68c7837ede30d8be0107b77d",
+        "owner": "68c52ee7720a2d3552e68d78",
+        "groupName": "Group-4",
+        "joinedUser": [
+            "68c7837ede30d8be0107b77d",
+            "68c7837ede30d8be0107b77f"
+        ],
+        "createdAt": "2025-09-15T03:09:50.214Z",
+        "updatedAt": "2025-09-15T04:11:45.406Z",
+        "groupAvatar": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757908639/twmsahtvhlhw5aie50du.png"
+    },
+    "meta": null
+}
+```
+
+
+<p id="delete-group"> </p>
+
+#### ➡️ Delete Group - (DELETE) - `/group/:groupId`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Group deleted successfully!",
+    "data": null,
+    "meta": null
+}
+```
+
+<p id="get-joined-groups"> </p>
+
+#### ➡️ Get Joined Groups - (GET) - `/group/join-group/:userId`
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Group fetched successfully!",
+    "data": [
+        {
+            "_id": "68c78377de30d8be0107b771",
+            "owner": "68c52ee7720a2d3552e68d78",
+            "groupName": "Group-1",
+            "joinedUser": [
+                "68c7837ede30d8be0107b77a"
+            ],
+            "createdAt": "2025-09-15T03:09:43.463Z",
+            "updatedAt": "2025-09-15T04:46:58.468Z"
+        },
+        {...}
+    ],
+    "meta": null
+}
+```
+
+`Note That`: Here only fetch which group user joined.
