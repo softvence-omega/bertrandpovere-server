@@ -34,6 +34,10 @@ Base URL: *https://bertrandpovere-server.onrender.com/api*
         - [Remove Member From Group](#remove-member-group)
         - [Delete Group](#delete-group)
         - [Get Joined Groups](#get-joined-groups)
+    - [User Endpoints](#user-endpoints)
+        - [Add New User](#add-new-user)
+        - [Get all Organization Users](#get-all-organization-users)
+        - [Get Organization Users By Id](#get-single-organization-users)
 
 
 
@@ -431,9 +435,17 @@ export type TOrganization = {
             "_id": "68c78377de30d8be0107b771",
             "owner": "68c52ee7720a2d3552e68d78",
             "groupName": "Group-1",
-            "joinedUser": [],
+            "joinedUser": [
+                {
+                    "_id": "68c7a5df61def31c2c423b19",
+                    "email": "user3@gmail.com",
+                    "firstName": "user",
+                    "lastName": "Hello",
+                    "userType": "GUEST"
+                }
+            ],
             "createdAt": "2025-09-15T03:09:43.463Z",
-            "updatedAt": "2025-09-15T03:09:43.463Z"
+            "updatedAt": "2025-09-15T05:36:48.053Z"
         },
         {...}
     ],
@@ -457,12 +469,20 @@ export type TOrganization = {
     "success": true,
     "message": "Group fetched successfully!",
     "data": {
-        "_id": "68c7837ede30d8be0107b77d",
+        "_id": "68c78377de30d8be0107b771",
         "owner": "68c52ee7720a2d3552e68d78",
-        "groupName": "Group-4",
-        "joinedUser": [],
-        "createdAt": "2025-09-15T03:09:50.214Z",
-        "updatedAt": "2025-09-15T03:09:50.214Z"
+        "groupName": "Group-1",
+        "joinedUser": [
+            {
+                "_id": "68c7a5df61def31c2c423b19",
+                "email": "user3@gmail.com",
+                "firstName": "user",
+                "lastName": "Hello",
+                "userType": "GUEST"
+            }
+        ],
+        "createdAt": "2025-09-15T03:09:43.463Z",
+        "updatedAt": "2025-09-15T05:36:48.053Z"
     },
     "meta": null
 }
@@ -616,3 +636,122 @@ export type TOrganization = {
 ```
 
 `Note That`: Here only fetch which group user joined.
+
+
+
+<p id="user-endpoints"> </p>
+
+## 🚀 User Endpoints
+
+<p id="add-new-user"> </p>
+
+#### ➡️ Add New User - (POST) - `/user`
+`Headers` 
+    - Content-Type: application/json
+    - Authorization: accessToken / Cookies needed
+
+`Request Body`
+```json
+{
+    "email":"user3@gmail.com",
+    "firstName":"user",
+    "lastName":"Hello",
+    "userType":"GUEST",
+    "password":"111111"
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "User added successfully!",
+    "data": {
+        "owner": "68c52ee7720a2d3552e68d78",
+        "email": "user3@gmail.com",
+        "firstName": "user",
+        "lastName": "Hello",
+        "password": "$2b$10$rH0Nw5qhP5Is1excnwhbkeXTk4PdNKDaW3CSPM0l681sEpPUip/AG",
+        "userType": "GUEST",
+        "joinedGroups": [],
+        "joinedSites": [],
+        "_id": "68c7a5df61def31c2c423b19",
+        "createdAt": "2025-09-15T05:36:31.204Z",
+        "updatedAt": "2025-09-15T05:36:31.204Z"
+    },
+    "meta": null
+}
+```
+
+
+<p id="get-all-organization-users"> </p>
+
+#### ➡️ Get all organization user - (GET) - `/`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Users fetched successfully!",
+    "data": [
+        {
+            "_id": "68c7a5bb61def31c2c423b0b",
+            "owner": "68c52ee7720a2d3552e68d78",
+            "email": "user1@gmail.com",
+            "firstName": "user",
+            "lastName": "Hello",
+            "userType": "GUEST",
+            "joinedGroups": [],
+            "joinedSites": [],
+            "createdAt": "2025-09-15T05:35:55.491Z",
+            "updatedAt": "2025-09-15T05:35:55.491Z"
+        },
+        {...},
+    ],
+    "meta": null
+}
+```
+
+<p id="get-single-organization-users"> </p>
+
+#### ➡️  Get single organization user - (GET) - `/user/:userId`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "User fetched successfully!",
+    "data": {
+        "_id": "68c7b01dce020b0cc83eb74d",
+        "owner": "68c52ee7720a2d3552e68d78",
+        "email": "user3@gmail.com",
+        "firstName": "user",
+        "lastName": "Hello",
+        "userType": "GUEST",
+        "joinedGroups": [
+            {
+                "_id": "68c78377de30d8be0107b771",
+                "owner": "68c52ee7720a2d3552e68d78",
+                "groupName": "Group-1",
+                "joinedUser": [
+                    "68c7837ede30d8be0107b77a",
+                    "68c7a5df61def31c2c423b19",
+                    "68c7b01dce020b0cc83eb74d"
+                ],
+                "createdAt": "2025-09-15T03:09:43.463Z",
+                "updatedAt": "2025-09-15T06:40:21.576Z"
+            },
+            {...}
+        ],
+        "joinedSites": [],
+        "organization": "68c52ee7720a2d3552e68d7a",
+        "createdAt": "2025-09-15T06:20:13.299Z",
+        "updatedAt": "2025-09-15T06:40:21.685Z"
+    },
+    "meta": null
+}
+```

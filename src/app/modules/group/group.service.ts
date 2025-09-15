@@ -4,6 +4,7 @@ import { FilterQuery } from "mongoose";
 import { AppError } from "../../utils/app_error";
 import uploadCloud from "../../utils/cloudinary";
 import { isAccountExist } from "../../utils/isAccountExist";
+import { UserModel } from "../user/user.schema";
 import { TGroup } from "./group.interface";
 import { GroupModel } from "./group.schema";
 
@@ -39,7 +40,7 @@ const get_all_groups_from_db = async (
     }
     // fetch data
     const result = await GroupModel.find(query)
-        // .populate("joinedUser", "firstName lastName email") 
+        .populate("joinedUser", "firstName lastName email userType")
         .skip(skip)
         .limit(limit)
         .lean();
@@ -59,7 +60,9 @@ const get_all_groups_from_db = async (
 };
 
 const get_single_group_by_id = async (groupId: string) => {
-    const result = await GroupModel.findById(groupId).lean();
+    const result = await GroupModel.findById(groupId)
+        .populate("joinedUser", "firstName lastName email userType")
+        .lean();
     if (!result) {
         throw new AppError("Group not found!!", httpStatus.NOT_FOUND)
     }
@@ -84,23 +87,45 @@ const add_member_into_group_db = async (req: Request) => {
     const email = req?.user?.email;
     const groupId = req?.params?.groupId;
     const isOrgExist = await isAccountExist(email as string);
-    const joinedUser = req?.body?.joinedUser;
-    const result = await GroupModel.findOneAndUpdate({ _id: groupId, owner: isOrgExist?._id }, { $addToSet: { joinedUser } }, { new: true });
+    const joinedUser = req?.body?.joinedUser as string[];
+
+    // Add members into the group
+    const result = await GroupModel.findOneAndUpdate(
+        { _id: groupId, owner: isOrgExist?._id },
+        { $addToSet: { joinedUser: { $each: joinedUser } } },
+        { new: true }
+    );
+
+    // Update each user’s joinedGroups
+    await UserModel.updateMany(
+        { _id: { $in: joinedUser } },
+        { $addToSet: { joinedGroups: groupId } }
+    );
+
     return result;
-}
+};
+
 const remove_member_from_group_db = async (req: Request) => {
     const email = req?.user?.email;
     const groupId = req?.params?.groupId;
     const isOrgExist = await isAccountExist(email as string);
-    const joinedUser = req?.body?.joinedUser;
+    const joinedUser = req?.body?.joinedUser as string[];
+
+    // Remove members from group
     const result = await GroupModel.findOneAndUpdate(
         { _id: groupId, owner: isOrgExist?._id },
         { $pull: { joinedUser: { $in: joinedUser } } },
         { new: true }
     );
 
+    await UserModel.updateMany(
+        { _id: { $in: joinedUser } },
+        { $pull: { joinedGroups: groupId } }
+    );
+
     return result;
-}
+};
+
 
 const delete_group_from_db = async (req: Request) => {
     const email = req?.user?.email;

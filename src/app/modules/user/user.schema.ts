@@ -15,6 +15,7 @@ const UserSchema = new Schema<TUser>(
         },
         joinedGroups: [{ type: Schema.Types.ObjectId, ref: "group" }],
         joinedSites: [{ type: Schema.Types.ObjectId, ref: "site" }],
+        organization: { type: Schema.Types.ObjectId, ref: "organization" },
     },
     { timestamps: true, versionKey: false }
 );
