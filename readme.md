@@ -38,6 +38,7 @@ Base URL: *https://bertrandpovere-server.onrender.com/api*
         - [Add New User](#add-new-user)
         - [Get all Organization Users](#get-all-organization-users)
         - [Get Organization Users By Id](#get-single-organization-users)
+        - [Delete Organization Users By Id](#delete-organization-user)
 
 
 
@@ -752,6 +753,22 @@ export type TOrganization = {
         "createdAt": "2025-09-15T06:20:13.299Z",
         "updatedAt": "2025-09-15T06:40:21.685Z"
     },
+    "meta": null
+}
+```
+
+<p id="delete-organization-user"> </p>
+
+#### ➡️ Delete Organization User - (DELETE) - `/user/:userId`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "User deleted successfully!",
+    "data": null,
     "meta": null
 }
 ```
