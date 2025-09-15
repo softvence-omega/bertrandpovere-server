@@ -39,6 +39,12 @@ Base URL: *https://bertrandpovere-server.onrender.com/api*
         - [Get all Organization Users](#get-all-organization-users)
         - [Get Organization Users By Id](#get-single-organization-users)
         - [Delete Organization Users By Id](#delete-organization-user)
+    - [Site Endpoints](#site-endpoints)
+        - [Create New Site](#create-new-site)
+        - [Get All Sites](#get-all-sites)
+        - [Get Single Site](#get-single-site)
+        - [Update Site](#update-site)
+        - [Delete Site](#delete-site)
 
 
 
@@ -768,6 +774,165 @@ export type TOrganization = {
 {
     "success": true,
     "message": "User deleted successfully!",
+    "data": null,
+    "meta": null
+}
+```
+
+<p id="site-endpoints"> </p>
+
+## 🚀 Site End points
+
+
+<p id="create-new-site"> </p>
+
+#### ➡️ Create New Site - (POST) - `/site`
+`Headers` 
+- Content-Type: application/json
+- Authorization: accessToken / Cookies needed
+
+`Request Body`
+```json
+{
+    "siteName":"Softvence"
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Site created successful",
+    "data": {
+        "owner": "68c52ee7720a2d3552e68d78",
+        "organization": "68c52ee7720a2d3552e68d7a",
+        "siteName": "Softvence",
+        "joinedUsers": [],
+        "inspections": [],
+        "actions": [],
+        "_id": "68c7cf60b9b9ef2ade01a5cd",
+        "createdAt": "2025-09-15T08:33:36.878Z",
+        "updatedAt": "2025-09-15T08:33:36.878Z"
+    },
+    "meta": null
+}
+```
+
+
+<p id="get-all-sites"> </p>
+
+#### ➡️ Get All Sites - (GET) - `/site`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`Query Params`
+- page
+- limit
+- searchTerm
+
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Site fetched successful",
+    "data": {
+        "data": [
+            {
+                "_id": "68c7d13f5366bf8134d13678",
+                "owner": "68c52ee7720a2d3552e68d78",
+                "organization": "68c52ee7720a2d3552e68d7a",
+                "siteName": "Softvence omega",
+                "joinedUsers": [],
+                "inspections": [],
+                "actions": [],
+                "createdAt": "2025-09-15T08:41:35.171Z",
+                "updatedAt": "2025-09-15T08:41:35.171Z"
+            },
+            {...}
+        ],
+    },
+   "meta": {
+            "page": 1,
+            "limit": 10,
+            "skip": 0,
+            "total": 1
+        }
+}
+```
+
+
+<p id="get-single-site"> </p>
+
+#### ➡️ Get Single Site - (GET) - `/site/:siteId`
+ Authorization: accessToken / Cookies needed
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Site fetched successful",
+    "data": {
+        "_id": "68c7d13f5366bf8134d13678",
+        "owner": "68c52ee7720a2d3552e68d78",
+        "organization": "68c52ee7720a2d3552e68d7a",
+        "siteName": "Softvence omega",
+        "joinedUsers": [], // here include user data like first name, last name, email
+        "inspections": [],  // here include inspection data
+        "actions": [], // here include action data
+        "createdAt": "2025-09-15T08:41:35.171Z",
+        "updatedAt": "2025-09-15T08:41:35.171Z"
+    },
+    "meta": null
+}
+```
+
+<p id="update-site"> </p>
+
+#### ➡️ Update Site - (PATCH) - `/site/:siteId`
+
+`Headers` 
+- Content-Type: multipart/form-data
+- Authorization: accessToken / Cookies needed
+
+`Request Body`
+| Field Name | Type | Example |
+| --- | --- | --- |
+| data | Object | {"siteName":"Site-1"} |
+| image | File |  any .png, .jpg, .jpeg , .webp
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Site updated successful",
+    "data": {
+        "_id": "68c7d13f5366bf8134d13678",
+        "owner": "68c52ee7720a2d3552e68d78",
+        "organization": "68c52ee7720a2d3552e68d7a",
+        "siteName": "Site-1",
+        "joinedUsers": [],
+        "inspections": [],
+        "actions": [],
+        "createdAt": "2025-09-15T08:41:35.171Z",
+        "updatedAt": "2025-09-15T09:12:52.843Z",
+        "siteAvatar": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757927430/fiwjopwadpqak33clqac.png"
+    },
+    "meta": null
+}
+```
+
+
+<p id="delete-site"> </p>
+
+#### ➡️  Delete Site - (DELETE) - `/site/:siteId`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Site deleted successful",
     "data": null,
     "meta": null
 }

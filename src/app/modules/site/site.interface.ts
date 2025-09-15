@@ -1,11 +1,11 @@
-import { Types } from "mongoose"
+import { Types } from "mongoose";
 
 export type TSite = {
     owner: Types.ObjectId;
+    organization: Types.ObjectId;
     siteName: string;
     siteAvatar?: string;
     joinedUsers?: Types.ObjectId[];
     inspections?: Types.ObjectId[];
     actions?: Types.ObjectId[];
-
 }
