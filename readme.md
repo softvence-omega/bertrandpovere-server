@@ -1131,6 +1131,10 @@ export type TOrganization = {
 `Headers` 
 - Authorization: accessToken / Cookies needed
 
+`query params`
+- page
+- limit
+- searchTerm // which are search action title
 
 `Response`
 ```json
@@ -1178,6 +1182,57 @@ export type TOrganization = {
         "createdAt": "2025-09-16T05:59:52.442Z",
         "updatedAt": "2025-09-16T05:59:52.442Z"
     },
+    "meta": null
+}
+```
+
+<p id="update-action"> </p>
+
+#### ➡️ Update Action - (PATCH) - `/action/:actionId`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+- Content-Type: application/json
+
+`Request Body`
+```json
+{
+    "priority":"High",
+}
+
+```
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Action updated successfully!",
+    "data": {
+        "_id": "68c8fcd88f65dd27d24a7599",
+        "author": "68c52ee7720a2d3552e68d78",
+        "actionTitle": "Updated Action",
+        "priority": "High",
+        "dueDate": "2025-09-16T03:01:37.587+00:00",
+        "assignBy": [],
+        "state": "To do",
+        "createdAt": "2025-09-16T05:59:52.442Z",
+        "updatedAt": "2025-09-16T08:49:03.633Z"
+    },
+    "meta": null
+}
+```
+
+<p id="delete-action"> </p>
+
+#### ➡️ Delete Action - (DELETE) - `/action/:actionId`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Action deleted successfully!",
+    "data": null,
     "meta": null
 }
 ```
