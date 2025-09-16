@@ -12,6 +12,7 @@ export type TTemplate = {
             index: number;
             question: string;
             answer: string | string[];
+            correctAnswer: string | string[];
             isRequired: boolean;
         }[];
     }[];
@@ -21,6 +22,7 @@ export type TTemplate = {
             index: number;
             question: string;
             answer: string | string[];
+             correctAnswer: string | string[];
             isRequired: boolean;
         }[];
     }[];

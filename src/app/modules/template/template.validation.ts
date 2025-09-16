@@ -15,6 +15,7 @@ const create = z.object({
                     index: z.number(),
                     question: z.string(),
                     answer: z.union([z.string(), z.array(z.string())]),
+                    correctAnswer: z.union([z.string(), z.array(z.string())]),
                     isRequired: z.boolean(),
                 })
             ).optional(),
@@ -29,6 +30,7 @@ const create = z.object({
                     index: z.number(),
                     question: z.string(),
                     answer: z.union([z.string(), z.array(z.string())]),
+                    correctAnswer: z.union([z.string(), z.array(z.string())]),
                     isRequired: z.boolean(),
                 })
             ).optional(),

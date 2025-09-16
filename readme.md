@@ -45,6 +45,8 @@ Base URL: *https://bertrandpovere-server.onrender.com/api*
         - [Get Single Site](#get-single-site)
         - [Update Site](#update-site)
         - [Delete Site](#delete-site)
+        - [Add Member Into Site](#add-member-into-site)
+        - [Remove Member from Site](#remove-member-into-site)
 
 
 
@@ -73,8 +75,7 @@ type TAccount = {
 ### Template Model
 
 ```ts
-type TTemplate = {
-    _id: Types.ObjectId;
+export type TTemplate = {
     author: Types.ObjectId;
     templateLogo?: string;
     templateName: string;
@@ -86,6 +87,7 @@ type TTemplate = {
             index: number;
             question: string;
             answer: string | string[];
+            correctAnswer: string | string[];
             isRequired: boolean;
         }[];
     }[];
@@ -95,6 +97,7 @@ type TTemplate = {
             index: number;
             question: string;
             answer: string | string[];
+             correctAnswer: string | string[];
             isRequired: boolean;
         }[];
     }[];
@@ -116,8 +119,6 @@ type TTemplate = {
         userId: Types.ObjectId;
         role: "viewer" | "editor" | "owner";
     }[];
-    createdAt: string; // ISO string
-    updatedAt: string; // ISO string
 };
 
 ```
@@ -934,6 +935,77 @@ export type TOrganization = {
     "success": true,
     "message": "Site deleted successful",
     "data": null,
+    "meta": null
+}
+```
+
+<p id="add-member-into-site"> </p>
+
+#### ➡️ Add Member Into Site - (PUT) - `/site/add-member/:siteId`
+`Headers` 
+- Content-Type: application/json
+- Authorization: accessToken / Cookies needed
+
+`Request Body`
+```json
+{
+    "joinedUsers":["68c7b025ce020b0cc83eb759"]
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Member added into site successful",
+    "data": {
+        "_id": "68c7d13f5366bf8134d13678",
+        "owner": "68c52ee7720a2d3552e68d78",
+        "organization": "68c52ee7720a2d3552e68d7a",
+        "siteName": "Site-1",
+        "joinedUsers": [
+            "68c7b025ce020b0cc83eb759"
+        ],
+        "inspections": [],
+        "actions": [],
+        "createdAt": "2025-09-15T08:41:35.171Z",
+        "updatedAt": "2025-09-16T02:56:27.272Z",
+        "siteAvatar": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757927430/fiwjopwadpqak33clqac.png"
+    },
+    "meta": null
+}
+```
+
+
+<p id="remove-member-into-site"> </p>
+
+#### ➡️ Remove Member from Site - (PUT) - `/site/remove-member/:siteId`
+`Headers` 
+- Content-Type: application/json
+- Authorization: accessToken / Cookies needed
+
+`Request Body`
+```json
+{
+    "joinedUsers":["68c7b025ce020b0cc83eb759"]
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Member removed from site successful",
+    "data": {
+        "_id": "68c7d13f5366bf8134d13678",
+        "owner": "68c52ee7720a2d3552e68d78",
+        "organization": "68c52ee7720a2d3552e68d7a",
+        "siteName": "Site-1",
+        "joinedUsers": [],
+        "inspections": [],
+        "actions": [],
+        "createdAt": "2025-09-15T08:41:35.171Z",
+        "updatedAt": "2025-09-16T02:56:27.272Z",
+        "siteAvatar": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757927430/fiwjopwadpqak33clqac.png"
+    },
     "meta": null
 }
 ```

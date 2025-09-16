@@ -2,6 +2,7 @@ import { Request } from "express";
 import { AppError } from "../../utils/app_error";
 import uploadCloud from "../../utils/cloudinary";
 import { isAccountExist } from "../../utils/isAccountExist";
+import { UserModel } from "../user/user.schema";
 import { TSite } from "./site.interface";
 import { SiteModel } from "./site.schema";
 
@@ -95,6 +96,51 @@ const delete_site_information_into_db = async (req: Request) => {
     return null;
 };
 
+const add_member_into_site_in_db = async (req: Request) => {
+    const email = req?.user?.email;
+    const siteId = req?.params?.siteId;
+    const isOrgExist = await isAccountExist(email as string);
+    const joinedUsers = req?.body?.joinedUsers as string[];
+
+    // Add members into the group
+    const isSiteExist = await SiteModel.findById(siteId).lean();
+    if (!isSiteExist) {
+        throw new AppError('Site not found', 400);
+    }
+    const result = await SiteModel.findOneAndUpdate(
+        { _id: siteId, owner: isOrgExist?._id },
+        { $addToSet: { joinedUsers: { $each: joinedUsers } } },
+        { new: true }
+    );
+
+    // Update each user’s joinedGroups
+    await UserModel.updateMany(
+        { _id: { $in: joinedUsers } },
+        { $addToSet: { joinedSites: siteId } }
+    );
+    return result;
+}
+
+const remove_member_from_site_db = async (req: Request) => {
+    const email = req?.user?.email;
+    const siteId = req?.params?.siteId;
+    const isOrgExist = await isAccountExist(email as string);
+    const joinedUsers = req?.body?.joinedUsers as string[];
+
+    // Remove members from group
+    const result = await SiteModel.findOneAndUpdate(
+        { _id: siteId, owner: isOrgExist?._id },
+        { $pull: { joinedUsers: { $in: joinedUsers } } },
+        { new: true }
+    );
+
+    await UserModel.updateMany(
+        { _id: { $in: joinedUsers } },
+        { $pull: { joinedSites: siteId } }
+    );
+
+    return result;
+};
 
 
 export const site_services = {
@@ -102,5 +148,7 @@ export const site_services = {
     get_all_sites_from_db,
     get_single_site_from_db,
     update_site_information_into_db,
-    delete_site_information_into_db
+    delete_site_information_into_db,
+    add_member_into_site_in_db,
+    remove_member_from_site_db
 }

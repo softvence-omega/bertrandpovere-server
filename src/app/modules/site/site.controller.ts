@@ -50,11 +50,31 @@ const delete_site_information = catchAsync(async (req, res) => {
         data: result
     })
 });
+const add_member_into_site = catchAsync(async (req, res) => {
+    const result = await site_services.add_member_into_site_in_db(req)
+    manageResponse(res, {
+        success: true,
+        message: "Member added into site successful",
+        statusCode: httpStatus.OK,
+        data: result
+    })
+});
+const remove_member_from_site = catchAsync(async (req, res) => {
+    const result = await site_services.remove_member_from_site_db(req)
+    manageResponse(res, {
+        success: true,
+        message: "Member removed into site successful",
+        statusCode: httpStatus.OK,
+        data: result
+    })
+});
 
 export const site_controllers = {
     create_new_site,
     get_all_sites,
     get_single_site,
     update_site_information,
-    delete_site_information
+    delete_site_information,
+    add_member_into_site,
+    remove_member_from_site
 }

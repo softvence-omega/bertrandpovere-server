@@ -23,5 +23,7 @@ siteRouter.patch(
     site_controllers.update_site_information
 )
 siteRouter.delete("/:siteId", auth("ADMIN"), site_controllers.delete_site_information)
+siteRouter.put("/add-member/:siteId", auth("ADMIN"), RequestValidator(site_validation.addMember), site_controllers.add_member_into_site)
+siteRouter.put("/remove-member/:siteId", auth("ADMIN"), RequestValidator(site_validation.addMember), site_controllers.remove_member_from_site)
 
 export default siteRouter;
