@@ -1155,7 +1155,12 @@ export type TOrganization = {
         },
         {...}
     ],
-    "meta": null
+     "meta": {
+        "page": 1,
+        "limit": 10,
+        "skip": 0,
+        "total": 5
+    }
 }
 ```
 
