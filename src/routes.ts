@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import authRoute from './app/modules/auth/auth.route';
 import groupRouter from './app/modules/group/group.route';
+import organizationRouter from './app/modules/organization/organization.route';
 import siteRouter from './app/modules/site/site.route';
 import userRoute from './app/modules/user/user.route';
 
@@ -13,6 +14,7 @@ const moduleRoutes = [
     { path: '/group', route: groupRouter },
     { path: '/user', route: userRoute },
     { path: '/site', route: siteRouter },
+    { path: '/organization', route: organizationRouter },
 
 
 ];

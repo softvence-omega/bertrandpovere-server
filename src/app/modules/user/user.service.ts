@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { Request } from "express";
 import { AppError } from '../../utils/app_error';
 import { isAccountExist } from "../../utils/isAccountExist";
+import sendMail from '../../utils/mail_sender';
 import { GroupModel } from '../group/group.schema';
 import { UserModel } from './user.schema';
 
@@ -21,6 +22,14 @@ const add_new_user_in_organization_db = async (req: Request) => {
         owner: isOrgExist?._id
     }
     const result = await UserModel.create(payload);
+    await sendMail({
+        to: req?.body?.email,
+        subject: "Welcome to the organization",
+        name: `${payload?.firstName} ${payload?.lastName}`,
+        textBody: "You have been invited to join the organization",
+        htmlBody: `
+        You have been invited to join the organization. Your login details are: Email: ${req?.body?.email} , Password: <span style="color:skyblue"> ${req?.body?.password} </span>
+        `});
     return result;
 }
 

@@ -47,6 +47,8 @@ Base URL: *https://bertrandpovere-server.onrender.com/api*
         - [Delete Site](#delete-site)
         - [Add Member Into Site](#add-member-into-site)
         - [Remove Member from Site](#remove-member-into-site)
+    - [Organization Endpoints](#organization-endpoints)
+        - [Update Organization](#update-organization)
 
 
 
@@ -689,6 +691,7 @@ export type TOrganization = {
     "meta": null
 }
 ```
+`Not That` : Invited user will notify via email with there login credentials.
 
 
 <p id="get-all-organization-users"> </p>
@@ -1005,6 +1008,67 @@ export type TOrganization = {
         "createdAt": "2025-09-15T08:41:35.171Z",
         "updatedAt": "2025-09-16T02:56:27.272Z",
         "siteAvatar": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757927430/fiwjopwadpqak33clqac.png"
+    },
+    "meta": null
+}
+```
+
+
+<p id="organization-endpoints"> </p>
+
+## 🚀 Organization Endpoints
+
+
+<p id="update-organization"> </p>
+
+#### ➡️ Update Organization - (PATCH) - `/organization/update-info`
+`Headers` 
+- Content-Type: Multipart/form-data
+- Authorization: accessToken / Cookies needed
+
+`Request Body`
+
+| Field Name | Type | Example |
+| --- | --- | --- |
+| data | Object | {sample data} |
+| image | File |  any .png, .jpg, .jpeg , .webp
+
+
+`Note that`: sample data as below, all field are optional.
+```json
+{
+  "organizationName": "Tech Innovators Ltd.",
+  "owner": "650c5b2e1f2a5d9b12345678",
+  "phoneNumber": "+8801712345678",
+  "websiteURL": "https://techinnovators.com",
+  "language": "english",
+  "dateFormat": "dd/mm/yyyy",
+  "timeFormat": "24h",
+  "temperatureUnit": "C",
+  "distanceUnit": "km"
+}
+```
+
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Organization update successfully!",
+    "data": {
+        "_id": "68c52ee7720a2d3552e68d7a",
+        "organizationName": "Tech Innovators Ltd.",
+        "owner": "650c5b2e1f2a5d9b12345678",
+        "language": "english",
+        "dateFormat": "dd/mm/yyyy",
+        "timeFormat": "24h",
+        "temperatureUnit": "C",
+        "distanceUnit": "km",
+        "createdAt": "2025-09-13T08:44:23.868Z",
+        "updatedAt": "2025-09-16T03:28:34.373Z",
+        "organizationLogo": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757993314/scge0towmgimusz2x3h9.png",
+        "phoneNumber": "+8801712345678",
+        "websiteURL": "https://techinnovators.com"
     },
     "meta": null
 }
