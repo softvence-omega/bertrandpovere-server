@@ -49,6 +49,12 @@ Base URL: *https://bertrandpovere-server.onrender.com/api*
         - [Remove Member from Site](#remove-member-into-site)
     - [Organization Endpoints](#organization-endpoints)
         - [Update Organization](#update-organization)
+    - [Action Endpoints](#action-endpoints)
+        - [Create New Action](#create-new-action)
+        - [Get All Actions](#get-all-actions)
+        - [Get Single Action](#get-single-action)
+        - [Update Action](#update-action)
+        - [Delete Action](#delete-action)
 
 
 
@@ -129,15 +135,13 @@ export type TTemplate = {
 ```ts
 export type TAction = {
     _id: Types.ObjectId;
-    index: string;
     author: Types.ObjectId;
     actionTitle: string;
     actionDisc?: string;
     priority: "LOW" | "MEDIUM" | "HIGH";
     dueDate: string;
-    assignBy?: Types.ObjectId;
-    createdAt: string; // ISO string
-    updatedAt: string; // ISO string
+    assignBy?: Types.ObjectId[];
+    state: "To do" | "In Progress" | "Complete" | "can’t do";
 }
 ```
 
@@ -1016,7 +1020,7 @@ export type TOrganization = {
 
 <p id="organization-endpoints"> </p>
 
-## 🚀 Organization Endpoints
+### 🚀 Organization Endpoints
 
 
 <p id="update-organization"> </p>
@@ -1069,6 +1073,110 @@ export type TOrganization = {
         "organizationLogo": "https://res.cloudinary.com/dnxsk9rgl/image/upload/v1757993314/scge0towmgimusz2x3h9.png",
         "phoneNumber": "+8801712345678",
         "websiteURL": "https://techinnovators.com"
+    },
+    "meta": null
+}
+```
+
+<p id="action-endpoints"></p>
+
+### 🚀 Action Endpoints
+
+
+<p id="create-new-action"> </p>
+
+#### ➡️ Create New action - (POST) - `/action`
+`Headers` 
+- Content-Type: application/json
+- Authorization: accessToken / Cookies needed
+
+`Request Body`
+```json
+{
+    "actionTitle":"First Action",
+    "priority":"Low",
+    "dueDate":"2025-09-16T03:01:37.587+00:00",
+    "index":2,
+
+    // optional fields
+    "assignBy": [], // ObjetId array
+    "state": "To do", // To do, In Progress, Complete, can’t do
+    "priority": "Low", // Low, Medium, High
+
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Action created successfully!",
+    "data": {
+        "author": "68c52ee7720a2d3552e68d78",
+        "actionTitle": "First Action",
+        "priority": "Low",
+        "dueDate": "2025-09-16T03:01:37.587+00:00",
+        "assignBy": [],
+        "state": "To do",
+        "_id": "68c8fcd88f65dd27d24a7599",
+        "createdAt": "2025-09-16T05:59:52.442Z",
+        "updatedAt": "2025-09-16T05:59:52.442Z"
+    },
+    "meta": null
+}
+```
+
+<p id="get-all-actions"> </p>
+
+#### ➡️ Get All Action - (GET) - `/action`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Action created successfully!",
+    "data": [
+        {
+            "_id": "68c8fcd88f65dd27d24a7599",
+            "author": "68c52ee7720a2d3552e68d78",
+            "actionTitle": "First Action",
+            "priority": "Low",
+            "dueDate": "2025-09-16T03:01:37.587+00:00",
+            "assignBy": [],
+            "state": "To do",
+            "createdAt": "2025-09-16T05:59:52.442Z",
+            "updatedAt": "2025-09-16T05:59:52.442Z"
+        },
+        {...}
+    ],
+    "meta": null
+}
+```
+
+<p id="get-single-action"> </p>
+
+#### ➡️ Get Single Action - (GET) - `/action/:actionId`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Action fetched successfully!",
+    "data": {
+        "_id": "68c8fcd88f65dd27d24a7599",
+        "author": "68c52ee7720a2d3552e68d78",
+        "actionTitle": "First Action",
+        "priority": "Low",
+        "dueDate": "2025-09-16T03:01:37.587+00:00",
+        "assignBy": [],
+        "state": "To do",
+        "createdAt": "2025-09-16T05:59:52.442Z",
+        "updatedAt": "2025-09-16T05:59:52.442Z"
     },
     "meta": null
 }

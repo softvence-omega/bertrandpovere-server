@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import actionRouter from './app/modules/action/action.route';
 import authRoute from './app/modules/auth/auth.route';
 import groupRouter from './app/modules/group/group.route';
 import organizationRouter from './app/modules/organization/organization.route';
@@ -15,6 +16,7 @@ const moduleRoutes = [
     { path: '/user', route: userRoute },
     { path: '/site', route: siteRouter },
     { path: '/organization', route: organizationRouter },
+    { path: '/action', route: actionRouter },
 
 
 ];

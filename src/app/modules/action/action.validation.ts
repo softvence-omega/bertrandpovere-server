@@ -1,13 +1,12 @@
 import { z } from "zod";
 
 const create = z.object({
-    index: z.string(),
-    author: z.string(),
     actionTitle: z.string().min(1),
     actionDisc: z.string().optional(),
-    priority: z.enum(["LOW", "MEDIUM", "HIGH"]),
+    priority: z.enum(["Low", "Medium", "High"]),
     dueDate: z.string(),
-    assignBy: z.string().optional(),
+    assignBy: z.array(z.string()).optional(),
+    state: z.enum(["To do", "In Progress", "Complete", "can’t do"]).default("To do"),
 });
 
 export const action_validation = {
