@@ -55,6 +55,12 @@ Base URL: *https://bertrandpovere-server.onrender.com/api*
         - [Get Single Action](#get-single-action)
         - [Update Action](#update-action)
         - [Delete Action](#delete-action)
+    - [Template Endpoints](#template-endpoints)
+        - [Create New Template](#create-new-template)
+        - [Get All Templates](#get-all-template)
+        - [Get Single Template](#get-single-template)
+        - [Update Template](#update-template)
+        - [Delete Template](#delete-template)
 
 
 
@@ -83,31 +89,45 @@ type TAccount = {
 ### Template Model
 
 ```ts
+import { Types } from "mongoose";
+
+type BaseQuestion = {
+    index: number;
+    question: string;
+    isRequired: boolean;
+};
+
+type InputQuestion = BaseQuestion & {
+    answerType: "input";
+    valueType: "text" | "number" | "date" | "email" | "password";
+};
+
+type SelectQuestion = BaseQuestion & {
+    answerType: "select";
+    options: string[];
+};
+
+
+type MultiSelectQuestion = BaseQuestion & {
+    answerType: "multiselect";
+    options: string[];
+};
+
+export type Question = InputQuestion | SelectQuestion | MultiSelectQuestion;
+
 export type TTemplate = {
-    author: Types.ObjectId;
+    author: Types.ObjectId; // don't confuse this is organization id.
     templateLogo?: string;
     templateName: string;
     templateDisc?: string;
     pages: {
         pageIndex: number;
         title: string;
-        questions?: {
-            index: number;
-            question: string;
-            answer: string | string[];
-            correctAnswer: string | string[];
-            isRequired: boolean;
-        }[];
+        questions?: Question[];
     }[];
     approval?: {
         approvedBy: string;
-        questions?: {
-            index: number;
-            question: string;
-            answer: string | string[];
-             correctAnswer: string | string[];
-            isRequired: boolean;
-        }[];
+        questions?: Question[];
     }[];
     report?: {
         style?: {
@@ -115,19 +135,20 @@ export type TTemplate = {
             logo?: string;
             pageSize?: "A4" | "LETTER";
             thumbnailGrid?: number;
-            resolution?: "HIGH" | "LOW"
+            resolution?: "HIGH" | "LOW";
         };
         content?: {
             footer?: boolean;
             pageBreak?: boolean;
             tableOfContent?: boolean;
-        }
+        };
     };
     access?: {
         userId: Types.ObjectId;
         role: "viewer" | "editor" | "owner";
     }[];
 };
+
 
 ```
 
@@ -1237,6 +1258,284 @@ export type TOrganization = {
 {
     "success": true,
     "message": "Action deleted successfully!",
+    "data": null,
+    "meta": null
+}
+```
+
+
+<p id="template-endpoints"> </p>
+
+## 🚀 Template Endpoints
+
+
+<p id="create-new-template"> </p>
+
+#### ➡️ Create new Template - (POST) - `/template`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Template created successful",
+    "data": {
+        "author": "68c52ee7720a2d3552e68d78",
+        "templateName": "Untitled Template",
+        "pages": [
+            {
+                "pageIndex": 0,
+                "title": "Untitled Page",
+                "questions": [
+                    {
+                        "index": 0,
+                        "question": "Site conducted",
+                        "isRequired": true,
+                        "answerType": "input",
+                        "valueType": "text"
+                    },
+                    {
+                        "index": 1,
+                        "question": "Conducted on",
+                        "isRequired": false,
+                        "answerType": "input",
+                        "valueType": "date"
+                    },
+                    {
+                        "index": 2,
+                        "question": "Prepared by",
+                        "isRequired": false,
+                        "answerType": "input",
+                        "valueType": "text"
+                    },
+                    {
+                        "index": 3,
+                        "question": "Where is your current office located?",
+                        "isRequired": true,
+                        "answerType": "location",
+                        "coordinates": {
+                            "lat": 23.8103,
+                            "lng": 90.4125
+                        }
+                    }
+                ]
+            },
+            {
+                "pageIndex": 1,
+                "title": "Untitled Page",
+                "questions": []
+            }
+        ],
+        "_id": "68cb8e45c97f2019edd6aaa6",
+        "approval": [],
+        "access": [],
+        "createdAt": "2025-09-18T04:44:53.731Z",
+        "updatedAt": "2025-09-18T04:44:53.731Z"
+    },
+    "meta": null
+}
+```
+
+`Note That`: When create new template, initially you don't need to send any data on backend. We provided a default template for creating new request. After that, you update or edit this template, for auto saving you can use onChange event.
+
+
+<p id="get-all-template"> </p>
+
+#### ➡️ Get All Template - (GET) - `/`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`Query Params`
+- page
+- limit
+- searchTerm
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Template fetched successful",
+    "data": {
+        "data": [
+            {
+                "_id": "68cb92bbcb42017d5e8d2c3c",
+                "author": "68c52ee7720a2d3552e68d7a",
+                "templateName": "Untitled Template",
+                "pages": [
+                    {
+                        "pageIndex": 0,
+                        "title": "Untitled Page",
+                        "questions": [
+                            {
+                                "index": 0,
+                                "question": "Site conducted",
+                                "isRequired": true,
+                                "answerType": "input",
+                                "valueType": "text"
+                            },
+                            {
+                                "index": 1,
+                                "question": "Conducted on",
+                                "isRequired": false,
+                                "answerType": "input",
+                                "valueType": "date"
+                            },
+                            {
+                                "index": 2,
+                                "question": "Prepared by",
+                                "isRequired": false,
+                                "answerType": "input",
+                                "valueType": "text"
+                            },
+                            {
+                                "index": 3,
+                                "question": "Where is your current office located?",
+                                "isRequired": true,
+                                "answerType": "location",
+                                "coordinates": {
+                                    "lat": 23.8103,
+                                    "lng": 90.4125
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "pageIndex": 1,
+                        "title": "Untitled Page",
+                        "questions": []
+                    }
+                ],
+                "approval": [],
+                "access": [],
+                "createdAt": "2025-09-18T05:03:55.579Z",
+                "updatedAt": "2025-09-18T05:03:55.579Z"
+            },
+            {
+                ...
+            }
+            
+        ],
+        "meta": {
+            "total": 3,
+            "page": 1,
+            "limit": 10,
+            "totalPages": 1
+        }
+    },
+    "meta": null
+}
+```
+
+<p id="get-single-template"> </p>
+
+#### ➡️ Get Single Template - (GET) - `/:templateId`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`Params`
+- templateId
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Template fetched successful",
+    "data": {
+        "_id": "68cb92bbcb42017d5e8d2c3c",
+        "author": "68c52ee7720a2d3552e68d7a",
+        "templateName": "Untitled Template",
+        "pages": [
+            {
+                "pageIndex": 0,
+                "title": "Untitled Page",
+                "questions": [
+                    {
+                        "index": 0,
+                        "question": "Site conducted",
+                        "isRequired": true,
+                        "answerType": "input",
+                        "valueType": "text"
+                    },
+                    {
+                        "index": 1,
+                        "question": "Conducted on",
+                        "isRequired": false,
+                        "answerType": "input",
+                        "valueType": "date"
+                    },
+                    {
+                        "index": 2,
+                        "question": "Prepared by",
+                        "isRequired": false,
+                        "answerType": "input",
+                        "valueType": "text"
+                    },
+                    {
+                        "index": 3,
+                        "question": "Where is your current office located?",
+                        "isRequired": true,
+                        "answerType": "location",
+                        "coordinates": {
+                            "lat": 23.8103,
+                            "lng": 90.4125
+                        }
+                    }
+                ]
+            },
+            {
+                "pageIndex": 1,
+                "title": "Untitled Page",
+                "questions": []
+            }
+        ],
+        "approval": [],
+        "access": [],
+        "createdAt": "2025-09-18T05:03:55.579Z",
+        "updatedAt": "2025-09-18T05:03:55.579Z"
+    },
+    "meta": null
+}
+```
+
+
+<p id="update-template"> </p>
+
+#### ➡️ Update Template - (PATCH) - `/:templateId`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`Request Body`
+| Field Name | Type | Example |
+| --- | --- | --- |
+| data | Object | {... same formate of TTemplate data} |
+|image | File |  any .png, .jpg, .jpeg , .webp, .svg |
+
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Template updated successful",
+    "data": {
+        .... // new updated data
+    },
+    "meta": null
+}
+```
+
+
+<p id="delete-template"> </p>
+
+#### ➡️ Delete Template - (DELETE) - `/:templateId`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Template delete successful",
     "data": null,
     "meta": null
 }

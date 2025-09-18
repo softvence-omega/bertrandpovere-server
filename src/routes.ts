@@ -4,6 +4,7 @@ import authRoute from './app/modules/auth/auth.route';
 import groupRouter from './app/modules/group/group.route';
 import organizationRouter from './app/modules/organization/organization.route';
 import siteRouter from './app/modules/site/site.route';
+import templateRouter from './app/modules/template/template.route';
 import userRoute from './app/modules/user/user.route';
 
 
@@ -17,7 +18,7 @@ const moduleRoutes = [
     { path: '/site', route: siteRouter },
     { path: '/organization', route: organizationRouter },
     { path: '/action', route: actionRouter },
-
+    { path: '/template', route: templateRouter },
 
 ];
 

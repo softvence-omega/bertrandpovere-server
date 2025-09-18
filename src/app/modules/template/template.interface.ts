@@ -1,5 +1,34 @@
 import { Types } from "mongoose";
 
+type BaseQuestion = {
+    index: number;
+    question: string;
+    isRequired: boolean;
+};
+
+type InputQuestion = BaseQuestion & {
+    answerType: "input";
+    valueType: "text" | "number" | "date" | "email" | "password";
+};
+
+type SelectQuestion = BaseQuestion & {
+    answerType: "select";
+    options: string[];
+};
+
+
+type MultiSelectQuestion = BaseQuestion & {
+    answerType: "multiselect";
+    options: string[];
+};
+
+type LocationQuestion = BaseQuestion & {
+    answerType: "location";
+    valueType?: "point"; // optional, can be extended in future
+    coordinates?: { lat: number; lng: number };
+};
+export type Question = InputQuestion | SelectQuestion | MultiSelectQuestion | LocationQuestion;
+
 export type TTemplate = {
     author: Types.ObjectId;
     templateLogo?: string;
@@ -8,23 +37,11 @@ export type TTemplate = {
     pages: {
         pageIndex: number;
         title: string;
-        questions?: {
-            index: number;
-            question: string;
-            answer: string | string[];
-            correctAnswer: string | string[];
-            isRequired: boolean;
-        }[];
+        questions?: Question[];
     }[];
     approval?: {
         approvedBy: string;
-        questions?: {
-            index: number;
-            question: string;
-            answer: string | string[];
-             correctAnswer: string | string[];
-            isRequired: boolean;
-        }[];
+        questions?: Question[];
     }[];
     report?: {
         style?: {
@@ -32,13 +49,13 @@ export type TTemplate = {
             logo?: string;
             pageSize?: "A4" | "LETTER";
             thumbnailGrid?: number;
-            resolution?: "HIGH" | "LOW"
+            resolution?: "HIGH" | "LOW";
         };
         content?: {
             footer?: boolean;
             pageBreak?: boolean;
             tableOfContent?: boolean;
-        }
+        };
     };
     access?: {
         userId: Types.ObjectId;
