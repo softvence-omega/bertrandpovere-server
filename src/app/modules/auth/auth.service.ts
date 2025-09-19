@@ -125,7 +125,7 @@ const user_login_user_from_db = async (payload: TLoginPayload) => {
         configs.jwt.refresh_expires as string,
     );
     const io = getIO();
-    const onlineUsers = onlineUsersByEmail.get(isExistAccount?.owner?.email as string);
+    const onlineUsers = onlineUsersByEmail.get((isExistAccount?.owner as any)?.email as string);
     if (onlineUsers?.socketId) {
         io.to(onlineUsers.socketId).emit("user-logged-in", {
             name: `${isExistAccount.firstName} ${isExistAccount.lastName}`

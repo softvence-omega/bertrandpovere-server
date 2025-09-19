@@ -24,7 +24,6 @@ export function setupSocket(_io: Server) {
   io = _io;
 
   io.on("connection", (socket: Socket) => {
-    console.log(socket.id)
     if (socket.handshake.query?.token) {
       const verifiedUser = jwtHelpers.verifyToken(
         socket.handshake.query?.token as string,
@@ -54,6 +53,8 @@ export function setupSocket(_io: Server) {
       socket.emit("send-message", messages);
       socket.to(userStatus?.socketId as string).emit("send-message", messages);
     });
+
+
 
 
 
