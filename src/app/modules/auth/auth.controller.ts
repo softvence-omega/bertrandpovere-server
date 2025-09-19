@@ -35,6 +35,27 @@ const organization_login_user = catchAsync(async (req, res) => {
         },
     });
 });
+const user_login_user = catchAsync(async (req, res) => {
+    const result = await auth_services.user_login_user_from_db(req.body);
+    res.cookie('refreshToken', result.refreshToken, {
+        secure: configs.env == 'production',
+        httpOnly: true,
+    });
+    res.cookie('accessToken', result.accessToken, {
+        secure: configs.env == 'production',
+        httpOnly: true,
+    });
+
+    manageResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'User log in successful !',
+        data: {
+            accessToken: result.accessToken,
+            role: result?.role
+        },
+    });
+});
 
 const get_my_profile = catchAsync(async (req, res) => {
     const { email } = req.user!;
@@ -104,5 +125,6 @@ export const auth_controllers = {
     refresh_token,
     change_password,
     reset_password,
-    forget_password
+    forget_password,
+    user_login_user
 }

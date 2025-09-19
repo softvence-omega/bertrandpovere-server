@@ -18,20 +18,13 @@ const create_new_template_into_db = async (req: Request) => {
                 questions: [
                     {
                         index: 0,
-                        question: "Site conducted",
+                        question: "Conducted on",
                         answerType: "input",
-                        valueType: "text",
+                        valueType: "date",
                         isRequired: true,
                     },
                     {
                         index: 1,
-                        question: "Conducted on",
-                        answerType: "input",
-                        valueType: "date",
-                        isRequired: false,
-                    },
-                    {
-                        index: 2,
                         question: "Prepared by",
                         answerType: "input",
                         valueType: "text",
@@ -39,7 +32,7 @@ const create_new_template_into_db = async (req: Request) => {
                     },
                     {
                         index: 3,
-                        question: "Where is your current office located?",
+                        question: "Location",
                         answerType: "location",
                         isRequired: true,
                         coordinates: { lat: 23.8103, lng: 90.4125 }
@@ -79,6 +72,7 @@ const get_all_templates_from_db = async (req: Request) => {
         TemplateModel.find(query)
             .skip(skip)
             .limit(limitNum)
+            .sort({ createdAt: -1 })
             .lean(),
         TemplateModel.countDocuments(query),
     ]);

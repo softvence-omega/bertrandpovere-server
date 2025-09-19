@@ -1,11 +1,28 @@
 
+import http from "http";
 import mongoose from "mongoose";
+import { Server } from "socket.io";
 import app from "./app";
 import { configs } from "./app/configs";
+import { setupSocket } from "./socket";
+let io: Server;
+
+const server = http.createServer(app);
+io = new Server(server, {
+    cors: {
+        origin: ["http://localhost:5173", "https://unnig-courier.vercel.app"],
+        methods: ["GET", "POST"],
+        credentials: true,
+    },
+});
+
+// setup socket ONCE
+setupSocket(io);
+
 async function main() {
     await mongoose.connect(configs.db_url!);
-    app.listen(configs.port, () => {
-        console.log(`Server listening on port ${configs.port}`);
+    server.listen(configs.port, () => {
+        console.log(`APP NAME server app listening on port ${configs.port}`);
     });
 }
 main().catch(err => console.log(err));

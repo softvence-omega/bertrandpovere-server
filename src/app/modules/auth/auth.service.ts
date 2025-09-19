@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import httpStatus from 'http-status';
 import { JwtPayload, Secret } from "jsonwebtoken";
 import mongoose from "mongoose";
+import { getIO, onlineUsersByEmail } from "../../../socket";
 import { configs } from "../../configs";
 import { AppError } from "../../utils/app_error";
 import { isAccountExist } from "../../utils/isAccountExist";
@@ -9,9 +10,9 @@ import { jwtHelpers } from "../../utils/JWT";
 import sendMail from "../../utils/mail_sender";
 import { TOrganization } from "../organization/organization.interface";
 import { OrganizationModel } from "../organization/organization.schema";
+import { UserModel } from "../user/user.schema";
 import { TAccount, TLoginPayload } from "./auth.interface";
 import { Account_Model } from "./auth.schema";
-
 
 // register user
 const register_user_into_db = async (payload: any) => {
@@ -76,6 +77,7 @@ const organization_login_user_from_db = async (payload: TLoginPayload) => {
         {
             email: isExistAccount.email,
             role: isExistAccount.role,
+            userId: isExistAccount._id
         },
         configs.jwt.access_token as Secret,
         configs.jwt.access_expires as string,
@@ -92,6 +94,47 @@ const organization_login_user_from_db = async (payload: TLoginPayload) => {
         accessToken: accessToken,
         refreshToken: refreshToken,
         role: isExistAccount.role
+    };
+
+}
+const user_login_user_from_db = async (payload: TLoginPayload) => {
+    const isExistAccount = await UserModel.findOne({ email: payload?.email }).populate("owner").lean();
+    if (!isExistAccount) throw new AppError('User not found', httpStatus.NOT_FOUND)
+    const isPasswordMatch = await bcrypt.compare(
+        payload.password,
+        isExistAccount.password,
+    );
+    if (!isPasswordMatch) {
+        throw new AppError('Invalid password', httpStatus.UNAUTHORIZED);
+    }
+    const accessToken = jwtHelpers.generateToken(
+        {
+            email: isExistAccount.email,
+            role: "USER",
+            userId: isExistAccount._id
+        },
+        configs.jwt.access_token as Secret,
+        configs.jwt.access_expires as string,
+    );
+    const refreshToken = jwtHelpers.generateToken(
+        {
+            email: isExistAccount.email,
+            role: "USER",
+        },
+        configs.jwt.refresh_token as Secret,
+        configs.jwt.refresh_expires as string,
+    );
+    const io = getIO();
+    const onlineUsers = onlineUsersByEmail.get(isExistAccount?.owner?.email as string);
+    if (onlineUsers?.socketId) {
+        io.to(onlineUsers.socketId).emit("user-logged-in", {
+            name: `${isExistAccount.firstName} ${isExistAccount.lastName}`
+        });
+    }
+    return {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        role: "USER"
     };
 
 }
@@ -217,5 +260,6 @@ export const auth_services = {
     refresh_token_from_db,
     change_password_from_db,
     forget_password_from_db,
-    reset_password_into_db
+    reset_password_into_db,
+    user_login_user_from_db
 }

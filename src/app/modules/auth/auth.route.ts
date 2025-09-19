@@ -8,6 +8,7 @@ const authRoute = Router()
 
 authRoute.post("/register", RequestValidator(auth_validation.register_validation), auth_controllers.register_user)
 authRoute.post("/organization-login", RequestValidator(auth_validation.login_validation), auth_controllers.organization_login_user)
+authRoute.post("/user-login", RequestValidator(auth_validation.login_validation), auth_controllers.user_login_user)
 authRoute.get('/me', auth("ADMIN", "USER"), auth_controllers.get_my_profile);
 authRoute.post('/refresh-token', auth_controllers.refresh_token);
 authRoute.post('/change-password', auth("ADMIN", "USER"), RequestValidator(auth_validation.changePassword), auth_controllers.change_password);
