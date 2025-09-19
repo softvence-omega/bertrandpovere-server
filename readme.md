@@ -17,6 +17,8 @@ Base URL: *https://bertrandpovere-server.onrender.com/api*
     - [Group Model](#group-model)
     - [Site Model](#site-model)
     - [Organization Model](#organization-model)
+- [Notification Endpoints (Socket.io)](#notification-endpoints)
+    - [Login Users](#login-user)
 - [API Endpoints](#api-endpoints)
     - [Authentication Endpoints](#auth-endpoints)
         - [Organization Register](#organization-register)
@@ -233,6 +235,28 @@ export type TOrganization = {
 
 
 
+
+<p id="notification-endpoints"> </p>
+
+## 🚀 Notification endpoints using socket.io
+
+
+<p id="login-user"> </p>
+
+#### ➡️ Login User on organization - 
+
+`Event Name` : *user-logged-in*
+
+` Socket Response`
+
+```json
+{
+    "name": "user Hello",
+    "email": "user2@gmail.com",
+    "lastLoginTime": "2025-09-19T10:37:04.040Z"
+}
+```
+`Note that` : use socket.on("user-logged-in", (data) => {}); in client side. Don't send any data on this event.
 
 
 <p id="api-endpoints"> </p>

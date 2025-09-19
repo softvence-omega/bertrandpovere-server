@@ -31,7 +31,6 @@ export function setupSocket(_io: Server) {
       );
       onlineUsersByEmail.set(verifiedUser.email, { userId: verifiedUser.userId, socketId: socket.id });
       onlineUsersBySocket.set(socket.id, { userId: verifiedUser.userId, socketId: socket.id });
-      console.log(verifiedUser.email, { userId: verifiedUser.userId, socketId: socket.id })
     }
 
     socket.on("online-user", ({ email }) => {
@@ -39,23 +38,6 @@ export function setupSocket(_io: Server) {
       socket.emit("online-user", userStatus);
       socket.to(userStatus?.socketId as string).emit("online-user", userStatus);
     });
-
-    socket.on("send-message", ({ email, message }) => {
-      const userStatus = onlineUsersByEmail.get(email);
-      const senderInfo = onlineUsersBySocket.get(socket?.id);
-
-      const newMessage: Message = {
-        senderId: senderInfo?.userId as string,
-        receiverId: userStatus?.userId as string,
-        message: message
-      }
-      messages.push(newMessage);
-      socket.emit("send-message", messages);
-      socket.to(userStatus?.socketId as string).emit("send-message", messages);
-    });
-
-
-
 
 
     // Handle disconnect

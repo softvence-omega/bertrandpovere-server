@@ -128,7 +128,9 @@ const user_login_user_from_db = async (payload: TLoginPayload) => {
     const onlineUsers = onlineUsersByEmail.get((isExistAccount?.owner as any)?.email as string);
     if (onlineUsers?.socketId) {
         io.to(onlineUsers.socketId).emit("user-logged-in", {
-            name: `${isExistAccount.firstName} ${isExistAccount.lastName}`
+            name: `${isExistAccount.firstName} ${isExistAccount.lastName}`,
+            email: isExistAccount.email,
+            lastLoginTime: new Date()
         });
     }
     return {
