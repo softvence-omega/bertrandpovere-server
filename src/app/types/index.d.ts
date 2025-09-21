@@ -1,4 +1,3 @@
-import { TJwtUser } from "../modules/auth/auth.interface";
 import { JwtPayloadType } from "../utils/JWT";
 
 
@@ -9,4 +8,14 @@ declare global {
             user?: JwtPayloadType;
         }
     }
+}
+
+
+export type TNotification = {
+    message: string;
+    slug?:string;
+    status:"READ" | "UNREAD";
+    _id?:string
+    createdAt?:string
+    updatedAt?:string
 }

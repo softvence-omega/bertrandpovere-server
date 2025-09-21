@@ -9,42 +9,69 @@ const create_new_template_into_db = async (req: Request) => {
     const email = req?.user?.email;
     const isOrgExist = await isAccountExist(email as string);
     const templateData: Partial<TTemplate> = {
-        author: isOrgExist?.organization,
-        templateName: "Untitled Template",
+        organization: isOrgExist.organization,
+        templateName: "Safety Inspection Checklist",
+        templateDisc: "A standard checklist template for workplace safety audits.",
         pages: [
             {
-                pageIndex: 0,
-                title: "Untitled Page",
+                pageIndex: 1,
+                title: "General Safety",
                 questions: [
                     {
-                        index: 0,
-                        question: "Conducted on",
-                        answerType: "input",
-                        valueType: "date",
+                        index: 1,
+                        question: "Is the fire extinguisher accessible?",
                         isRequired: true,
+                        answerType: {
+                            answerType: "multipleSelect",
+                            value: ["yes", "no", "n/a"],
+                        },
                     },
                     {
-                        index: 1,
-                        question: "Prepared by",
-                        answerType: "input",
-                        valueType: "text",
+                        index: 2,
+                        question: "Provide details about any hazards observed.",
                         isRequired: false,
+                        answerType: {
+                            answerType: "annotation",
+                            value: "Observed some blocked exits near warehouse.",
+                        },
                     },
                     {
                         index: 3,
-                        question: "Location",
-                        answerType: "location",
+                        question: "Date of inspection",
                         isRequired: true,
-                        coordinates: { lat: 23.8103, lng: 90.4125 }
-                    }
-
+                        answerType: {
+                            answerType: "date",
+                            value: "2025-09-21",
+                        },
+                    },
                 ],
             },
             {
-                pageIndex: 1,
-                title: "Untitled Page",
+                pageIndex: 2,
+                title: "Compliance",
+                questions: [
+                    {
+                        index: 1,
+                        question: "Are workers wearing helmets?",
+                        isRequired: true,
+                        answerType: {
+                            answerType: "multipleSelect",
+                            value: ["compliant", "not-compliant"],
+                        },
+                    },
+                    {
+                        index: 2,
+                        question: "Upload a photo of safety equipment.",
+                        isRequired: false,
+                        answerType: {
+                            answerType: "media",
+                            value: "image", // File object in real use
+                        },
+                    },
+                ],
             },
         ],
+
     };
     const result = await TemplateModel.create(templateData);
     return result;
