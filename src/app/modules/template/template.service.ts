@@ -10,68 +10,47 @@ const create_new_template_into_db = async (req: Request) => {
     const isOrgExist = await isAccountExist(email as string);
     const templateData: Partial<TTemplate> = {
         organization: isOrgExist.organization,
-        templateName: "Safety Inspection Checklist",
-        templateDisc: "A standard checklist template for workplace safety audits.",
+        templateName: "Untitled template",
+        templateDisc: "Add a description",
         pages: [
             {
-                pageIndex: 1,
-                title: "General Safety",
+                pageIndex: 0,
+                title: "Title Page",
                 questions: [
                     {
-                        index: 1,
-                        question: "Is the fire extinguisher accessible?",
+                        index: 0,
+                        question: "Site conducted",
                         isRequired: true,
                         answerType: {
-                            answerType: "multipleSelect",
-                            value: ["yes", "no", "n/a"],
+                            answerType: "input",
+                            value: "text",
+                        },
+                    },
+                    {
+                        index: 1,
+                        question: "Conducted on",
+                        isRequired: false,
+                        answerType: {
+                            answerType: "date",
+                            value: "",
                         },
                     },
                     {
                         index: 2,
-                        question: "Provide details about any hazards observed.",
-                        isRequired: false,
-                        answerType: {
-                            answerType: "annotation",
-                            value: "Observed some blocked exits near warehouse.",
-                        },
-                    },
-                    {
-                        index: 3,
-                        question: "Date of inspection",
+                        question: "Prepared by",
                         isRequired: true,
                         answerType: {
-                            answerType: "date",
-                            value: "2025-09-21",
+                            answerType: "input",
+                            value: "text",
                         },
                     },
                 ],
             },
             {
-                pageIndex: 2,
-                title: "Compliance",
-                questions: [
-                    {
-                        index: 1,
-                        question: "Are workers wearing helmets?",
-                        isRequired: true,
-                        answerType: {
-                            answerType: "multipleSelect",
-                            value: ["compliant", "not-compliant"],
-                        },
-                    },
-                    {
-                        index: 2,
-                        question: "Upload a photo of safety equipment.",
-                        isRequired: false,
-                        answerType: {
-                            answerType: "media",
-                            value: "image", // File object in real use
-                        },
-                    },
-                ],
-            },
-        ],
-
+                pageIndex: 1,
+                title: "Untitled Page",
+            }
+        ]
     };
     const result = await TemplateModel.create(templateData);
     return result;
@@ -89,7 +68,7 @@ const get_all_templates_from_db = async (req: Request) => {
     // Verify account
     const isOrgExist = await isAccountExist(email as string);
     // Build query
-    const query: any = { author: isOrgExist.organization };
+    const query: any = { organization: isOrgExist.organization };
     if (searchTerm) {
         query.templateName = { $regex: searchTerm, $options: "i" };
     }
@@ -119,7 +98,7 @@ const get_single_template_from_db = async (req: Request) => {
     const templateId = req?.params?.templateId;
     const isOrgExist = await isAccountExist(email as string);
 
-    const result = await TemplateModel.findOne({ author: isOrgExist.organization, _id: templateId }).lean();
+    const result = await TemplateModel.findOne({ organization: isOrgExist.organization, _id: templateId }).lean();
     if (!result) {
         throw new AppError('Template not found', 404);
     }
@@ -136,7 +115,7 @@ const update_template_into_db = async (req: Request) => {
     }
 
     const isOrgExist = await isAccountExist(email as string);
-    const result = await TemplateModel.findOneAndUpdate({ author: isOrgExist.organization, _id: templateId }, body, { new: true }).lean();
+    const result = await TemplateModel.findOneAndUpdate({ organization: isOrgExist.organization, _id: templateId }, body, { new: true }).lean();
 
     return result;
 }
@@ -145,7 +124,7 @@ const delete_template_from_db = async (req: Request) => {
     const email = req?.user?.email;
     const templateId = req?.params?.templateId;
     const isOrgExist = await isAccountExist(email as string);
-    await TemplateModel.findOneAndDelete({ author: isOrgExist.organization, _id: templateId });
+    await TemplateModel.findOneAndDelete({ organization: isOrgExist.organization, _id: templateId });
     return null;
 }
 
