@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { configs } from '../configs';
 import { Account_Model } from '../modules/auth/auth.schema';
+import { UserModel } from '../modules/user/user.schema';
 import { AppError } from '../utils/app_error';
 import { jwtHelpers, JwtPayloadType } from '../utils/JWT';
 
@@ -22,8 +23,13 @@ const auth = (...roles: Role[]) => {
             if (!roles.length || !roles.includes(verifiedUser.role)) {
                 throw new AppError('You are not authorize!!', 401);
             }
-            // check user
-            const isUserExist = await Account_Model.findOne({ email: verifiedUser?.email }).lean()
+            let isUserExist;
+            if (roles.includes('ADMIN')) {
+                isUserExist = await Account_Model.findOne({ email: verifiedUser?.email, role: "ADMIN" }).lean()
+            }
+            else {
+                isUserExist = await UserModel.findOne({ email: verifiedUser?.email, role: "USER" }).lean()
+            }
             if (!isUserExist) {
                 throw new AppError("Account not found !", 404)
             }

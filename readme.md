@@ -12,6 +12,7 @@ Base URL: *https://bertrandpovere-server.onrender.com/api*
 - [Data Types](#data-types)
     - [Account Model](#account-model)
     - [Template Model](#template-model)
+    - [Inspection Model](#inspection-model)
     - [Action Model](#action-model)
     - [User Model](#user-model)
     - [Group Model](#group-model)
@@ -64,6 +65,13 @@ Base URL: *https://bertrandpovere-server.onrender.com/api*
         - [Get Single Template](#get-single-template)
         - [Update Template](#update-template)
         - [Delete Template](#delete-template)
+    - [Inspection Endpoints](#inspection-endpoints)
+        - [Create New Inspection](#create-new-inspection)
+        - [Get All Inspections](#get-all-inspection)
+        - [Get Single Inspection](#get-single-inspection)
+        - [Update Inspection](#update-inspection)
+        - [Delete Inspection](#delete-inspection)
+    
 
 
 
@@ -146,6 +154,27 @@ export type TTemplate = {
 
 
 ```
+
+### Inspection Model
+```ts
+export type TInspection = {
+    _id: Types.ObjectId;
+    organization: Types.ObjectId;
+    template: Types.ObjectId;
+    inspector: Types.ObjectId;
+
+    inspectionDetails: {
+        questionAdnAnswer: {
+            question: string;
+            answer: string | number | boolean | Date | string[];
+        }[]
+    }
+    createdAt: Date;
+    updatedAt: Date;
+};
+
+```
+
 
 ### Action Model
 ```ts
@@ -1567,6 +1596,192 @@ export type TOrganization = {
     "success": true,
     "message": "Template delete successful",
     "data": null,
+    "meta": null
+}
+```
+
+
+
+
+<p id="inspection-endpoints"> </p>
+
+## 🚀 Inspection Endpoints
+
+<p id="create-new-inspection"> </p>
+
+#### ➡️ Create New Inspection - (POST) - `/inspection`
+`Headers` 
+- Content-Type: application/json
+- Authorization: accessToken / Cookies needed
+
+
+`Request Body`
+```json
+{
+    {
+    "template":"68cfa0cdd0dde4e32cbceaa1",
+    "questionAdnAnswer":[
+        {
+            "question":"Hello Bangladesh ?",
+            "answer":"How are you?",
+            "note":"Hello Bangladesh ?", // optional
+            "media":["http://dummy.image.com", "https://dummy.image.com"] // optional
+        }
+    ]
+    }
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Inspection created successfully!",
+    "data": {
+        "organization": "68c52ee7720a2d3552e68d7a",
+        "template": "68cfa0cdd0dde4e32cbceaa1",
+        "inspector": "68c52ee7720a2d3552e68d78",
+        "questionAdnAnswer": [
+            {
+                "question": "Hello Bangladesh ?",
+                "answer": "How are you?",
+                "note":"Hello Bangladesh ?",
+                "media":["http://dummy.image.com", "https://dummy.image.com"]
+            }
+        ],
+        "_id": "68cfc6828c6f4ee272d932c2",
+        "createdAt": "2025-09-21T09:33:54.661Z",
+        "updatedAt": "2025-09-21T09:33:54.661Z"
+    },
+    "meta": null
+}
+```
+
+<p id="update-inspection"> </p>
+
+#### ➡️ Update Inspection - (PATCH) - `/inspection/:inspectionId`
+`Headers` 
+- Content-Type: application/json
+- Authorization: accessToken / Cookies needed
+
+
+`Request Body`
+```json
+{
+    "question":"Submit by?", // Not changeable by user. send this as it is same to same template question.
+    "answer":"Mahid", // optional
+    "note":"This is a testing inspection", // optional
+    "media":["http://dummy.image.com", "https://dummy.image.com"] // optional
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "Inspection update successfully!",
+    "data": {
+        "_id": "68cfc6828c6f4ee272d932c2",
+        "organization": "68c52ee7720a2d3552e68d7a",
+        "template": "68cfa0cdd0dde4e32cbceaa1",
+        "inspector": "68c52ee7720a2d3552e68d78",
+        "questionAdnAnswer": [
+            {
+                "question":"Submit by?",
+                "answer":"Mahid",
+                "note":"This is a testing inspection",
+                "media":["http://dummy.image.com", "https://dummy.image.com"]
+            }
+        ],
+        "createdAt": "2025-09-21T09:33:54.661Z",
+        "updatedAt": "2025-09-21T10:11:34.660Z"
+    },
+    "meta": null
+}
+```
+
+
+<p id="delete-inspection"> </p>
+
+#### ➡️ Delete Inspection - (DELETE) - `/inspection/:inspectionId`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Inspection delete successfully!",
+    "data": null,
+    "meta": null
+}
+```
+
+<p id="get-all-inspection"> </p>
+
+#### ➡️ Get All Inspection - (GET) - `/inspection`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`Query Params`
+- page
+- limit
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Inspection fetched successfully!",
+    "data": [
+        {
+            "_id": "68cfd554a37691f13caf92e0",
+            "organization": "68c52ee7720a2d3552e68d7a",
+            "template": "68cfa0cdd0dde4e32cbceaa1",
+            "inspector": "68c52ee7720a2d3552e68d78",
+            "questionAdnAnswer": [
+                {
+                    "question": "Hello Bagladesh ?",
+                    "answer": "How are you?",
+                    "mediaFiles": []
+                }
+            ],
+            "createdAt": "2025-09-21T10:37:08.525Z",
+            "updatedAt": "2025-09-21T10:37:08.525Z"
+        }
+    ],
+    "meta": {
+        "total": 1,
+        "page": 1,
+        "limit": 10,
+        "totalPages": 1
+    }
+}
+```
+
+<p id="get-single-inspection"> </p>
+
+#### ➡️ Get Single Inspection - (GET) - `/inspection/:inspectionId`
+`Headers` 
+- Authorization: accessToken / Cookies needed
+
+`Response`
+```json
+{
+    "success": true,
+    "message": "Inspection fetched successfully!",
+    "data": {
+        "_id": "68cfd554a37691f13caf92e0",
+        "organization": "68c52ee7720a2d3552e68d7a",
+        "template": "68cfa0cdd0dde4e32cbceaa1",
+        "inspector": "68c52ee7720a2d3552e68d78",
+        "questionAdnAnswer": [
+            {
+                "question": "Hello Bagladesh ?",
+                "answer": "How are you?",
+                "mediaFiles": []
+            }
+        ],
+        "createdAt": "2025-09-21T10:37:08.525Z",
+        "updatedAt": "2025-09-21T10:37:08.525Z"
+    },
     "meta": null
 }
 ```

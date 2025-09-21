@@ -2,6 +2,7 @@ import { Router } from 'express';
 import actionRouter from './app/modules/action/action.route';
 import authRoute from './app/modules/auth/auth.route';
 import groupRouter from './app/modules/group/group.route';
+import inspectionRouter from './app/modules/inspection/inspection.route';
 import organizationRouter from './app/modules/organization/organization.route';
 import siteRouter from './app/modules/site/site.route';
 import templateRouter from './app/modules/template/template.route';
@@ -19,6 +20,7 @@ const moduleRoutes = [
     { path: '/organization', route: organizationRouter },
     { path: '/action', route: actionRouter },
     { path: '/template', route: templateRouter },
+    { path: "/inspection", route: inspectionRouter }
 
 ];
 
