@@ -25,6 +25,7 @@ Base URL: *https://bertrandpovere-server.onrender.com/api*
     - [Authentication Endpoints](#auth-endpoints)
         - [Organization Register](#organization-register)
         - [Organization Login](#organization-login)
+        - [Team member Login](#user-login)
         - [Get Me With Organization](#get-me-organization-profile)
         - [Change Password](#change-password)
         - [Forgot Password](#forgot-password)
@@ -367,6 +368,29 @@ export type TOrganization = {
 `Note That` : accessToken and refreshToken are stored in cookies. You can pass it on headers. When you pass cookies on headers on this time you don't need to authorization header. It will managed automatically using cookie.
 
 
+<p id="user-login"> </p>
+
+#### ➡️ Team member Login - (POST) - `/auth/user-login`
+`Headers` - Content-Type: application/json <br/>
+`Request Body`
+```json
+{
+    "email":"user1@gmail.com",
+    "password":"111111"
+}
+```
+`Response`
+```json
+{
+    "success": true,
+    "message": "User log in successful !",
+    "data": {
+        "accessToken": "access token",
+        "role": "USER"
+    },
+    "meta": null
+}
+```
 
 <p id="get-me-organization-profile"> </p>
 
