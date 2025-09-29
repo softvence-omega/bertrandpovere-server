@@ -10,8 +10,8 @@ type TMailContent = {
 
 const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
-    port: 465,
-    secure: true, // true for 465, false for other ports
+    port: 587,         // switch to 587
+    secure: false, // true for 465, false for other ports
     auth: {
         user: configs.email.app_email!,
         pass: configs.email.app_password!,
@@ -21,7 +21,7 @@ const transporter = nodemailer.createTransport({
 // ✅ Email Sender Function
 const sendMail = async (payload: TMailContent) => {
     const info = await transporter.sendMail({
-        from: 'info@digitalcreditai.com',
+        from: configs.email.app_email!,
         to: payload.to,
         subject: payload.subject,
         text: payload.textBody,
