@@ -9,7 +9,8 @@ const siteRouter = Router();
 
 siteRouter.post("/", auth("ADMIN"), RequestValidator(site_validation.create), site_controllers.create_new_site)
 siteRouter.get("/", auth("ADMIN"), site_controllers.get_all_sites)
-siteRouter.get("/:siteId", site_controllers.get_single_site)
+siteRouter.get("/user", auth("USER"), site_controllers.get_all_user_sites)
+siteRouter.get("/:siteId", auth("ADMIN", "USER"), site_controllers.get_single_site)
 siteRouter.patch(
     "/:siteId",
     auth("ADMIN"),

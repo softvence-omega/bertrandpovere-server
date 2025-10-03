@@ -23,7 +23,7 @@ const create_new_site_in_db = async (req: Request) => {
 
     }
     const result = await SiteModel.create(sitePayload);
-    return result;;
+    return result;
 };
 
 const get_all_sites_from_db = async (req: Request) => {
@@ -58,6 +58,12 @@ const get_all_sites_from_db = async (req: Request) => {
             total,
         },
     };
+};
+const get_all_user_sites_from_db = async (req: Request) => {
+    const email = req?.user?.email;
+    const isOrgExist = await isAccountExist(email as string);
+    console.log(isOrgExist)
+    
 };
 const get_single_site_from_db = async (req: Request) => {
     const siteId = req?.params?.siteId;
@@ -150,5 +156,6 @@ export const site_services = {
     update_site_information_into_db,
     delete_site_information_into_db,
     add_member_into_site_in_db,
-    remove_member_from_site_db
+    remove_member_from_site_db,
+    get_all_user_sites_from_db
 }

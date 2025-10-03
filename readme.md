@@ -169,7 +169,8 @@ export type TInspection = {
             question: string;
             answer: string | number | boolean | Date | string[];
         }[]
-    }
+    };
+    status:'IN_PROGRESS' | 'COMPLETED' | 'DRAFT',
     createdAt: Date;
     updatedAt: Date;
 };

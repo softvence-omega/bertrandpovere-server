@@ -1,6 +1,6 @@
 import { Request } from "express";
 import httpStatus from 'http-status';
-import { FilterQuery } from "mongoose";
+import mongoose, { FilterQuery } from "mongoose";
 import { AppError } from "../../utils/app_error";
 import uploadCloud from "../../utils/cloudinary";
 import { isAccountExist } from "../../utils/isAccountExist";
@@ -40,7 +40,7 @@ const get_all_groups_from_db = async (
     }
     // fetch data
     const result = await GroupModel.find(query)
-        .populate("joinedUser", "firstName lastName email userType")
+        .populate("joinedUser")
         .skip(skip)
         .limit(limit)
         .lean();
@@ -88,7 +88,6 @@ const add_member_into_group_db = async (req: Request) => {
     const groupId = req?.params?.groupId;
     const isOrgExist = await isAccountExist(email as string);
     const joinedUser = req?.body?.joinedUser as string[];
-
     // Add members into the group
     const result = await GroupModel.findOneAndUpdate(
         { _id: groupId, owner: isOrgExist?._id },
@@ -136,7 +135,9 @@ const delete_group_from_db = async (req: Request) => {
 }
 
 const get_all_joined_groups_from_db = async (userId: string) => {
-    const result = await GroupModel.find({ joinedUser: { $in: [userId] } }).lean();
+    const result = await GroupModel.find({
+        joinedUser: { $in: [new mongoose.Types.ObjectId(userId)] }
+    }).lean();
     return result;
 };
 

@@ -10,5 +10,6 @@ export type TInspection = {
         answer: string | number | boolean | Date | string[];
         note?: string;
         mediaFiles?: string[]
-    }[]
+    }[],
+    status:'IN_PROGRESS' | 'COMPLETED' | 'DRAFT',
 };

@@ -1,4 +1,5 @@
 import jwt, { JwtPayload, Secret, SignOptions } from 'jsonwebtoken';
+import { Types } from 'mongoose';
 
 const generateToken = (payload: object, secret: Secret, expiresIn: string) => {
     const token = jwt.sign(payload, secret, {
@@ -22,5 +23,6 @@ export type JwtPayloadType = JwtPayload & {
     role: string;
     iat: number;
     exp: number;
+    userId?: Types.ObjectId;
 };
 export type JwtTokenType = string | JwtPayloadType | null;

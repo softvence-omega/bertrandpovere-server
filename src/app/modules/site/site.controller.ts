@@ -22,6 +22,15 @@ const get_all_sites = catchAsync(async (req, res) => {
         meta: result?.meta
     })
 });
+const get_all_user_sites = catchAsync(async (req, res) => {
+    const result = await site_services.get_all_user_sites_from_db(req)
+    manageResponse(res, {
+        success: true,
+        message: "Site fetched successful",
+        statusCode: httpStatus.OK,
+        data: result
+    })
+});
 const get_single_site = catchAsync(async (req, res) => {
     const result = await site_services.get_single_site_from_db(req)
     manageResponse(res, {
@@ -76,5 +85,6 @@ export const site_controllers = {
     update_site_information,
     delete_site_information,
     add_member_into_site,
-    remove_member_from_site
+    remove_member_from_site,
+    get_all_user_sites
 }

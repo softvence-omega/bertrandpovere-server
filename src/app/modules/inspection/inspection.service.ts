@@ -1,6 +1,8 @@
 import { Request } from "express";
 import { AppError } from "../../utils/app_error";
 import { isAccountExist } from "../../utils/isAccountExist";
+import { JwtPayloadType } from "../../utils/JWT";
+import { UserModel } from "../user/user.schema";
 import { TInspection } from "./inspaction.interface";
 import { InspectionModel } from "./inspection.shcema";
 
@@ -14,24 +16,30 @@ const save_new_inspection_into_db = async (req: Request) => {
 };
 
 const update_inspection_into_db = async (req: Request) => {
-    const { question, answer, note, mediaFiles } = req.body;
+    const { question, answer, note, mediaFiles, status } = req.body;
+
+    // build update object dynamically
+    const updateData: any = {
+        "questionAdnAnswer.$.answer": answer,
+        "questionAdnAnswer.$.note": note,
+        "questionAdnAnswer.$.mediaFiles": mediaFiles,
+    };
+
+    if (status) {
+        updateData.status = status;
+    }
     let result = await InspectionModel.findOneAndUpdate(
         {
             _id: req.params.inspectionId,
-            "questionAdnAnswer.question": question, // match by question
+            "questionAdnAnswer.question": question,
         },
-        {
-            $set: {
-                "questionAdnAnswer.$.answer": answer,
-                "questionAdnAnswer.$.note": note,
-                "questionAdnAnswer.$.mediaFiles": mediaFiles,
-            },
-        },
+        { $set: updateData },
         { new: true }
     );
 
     return result;
 };
+
 
 
 const delete_inspection_into_db = async (req: Request) => {
@@ -42,8 +50,14 @@ const delete_inspection_into_db = async (req: Request) => {
 };
 
 const get_all_inspection_into_db = async (req: Request) => {
-    const email = req?.user?.email;
-    const isOrgExist = await isAccountExist(email as string);
+    const { role, accountId, email } = req?.user as JwtPayloadType;
+
+    let isOrgExist;
+    if (role === "ADMIN") {
+        isOrgExist = await isAccountExist(email);
+    } else if (role === "USER") {
+        isOrgExist = await UserModel.findById(accountId as string).lean();
+    }
 
     // Get pagination params (default: page=1, limit=10)
     const page = Number(req.query.page) || 1;

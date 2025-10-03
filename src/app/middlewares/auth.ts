@@ -16,19 +16,22 @@ const auth = (...roles: Role[]) => {
             if (!token) {
                 throw new AppError('You are not authorize!!', 401);
             }
+
             const verifiedUser = jwtHelpers.verifyToken(
                 token,
                 configs.jwt.access_token as string,
             );
-            if (!roles.length || !roles.includes(verifiedUser.role)) {
+
+            // role validation
+            if (!roles.includes(verifiedUser.role)) {
                 throw new AppError('You are not authorize!!', 401);
             }
+
             let isUserExist;
-            if (roles.includes('ADMIN')) {
-                isUserExist = await Account_Model.findOne({ email: verifiedUser?.email, role: "ADMIN" }).lean()
-            }
-            else {
-                isUserExist = await UserModel.findOne({ email: verifiedUser?.email, role: "USER" }).lean()
+            if (verifiedUser.role === "ADMIN") {
+                isUserExist = await Account_Model.findOne({ email: verifiedUser?.email, role: "ADMIN" }).lean();
+            } if (verifiedUser.role === "USER") {
+                isUserExist = await UserModel.findOne({ email: verifiedUser?.email, role: "USER" }).lean();
             }
             if (!isUserExist) {
                 throw new AppError("Account not found !", 404)
@@ -42,7 +45,7 @@ const auth = (...roles: Role[]) => {
             if (isUserExist?.isDeleted) {
                 throw new AppError("This account is deleted", 401)
             }
-            req.user = verifiedUser as JwtPayloadType;
+            req.user = { ...verifiedUser, userId: isUserExist?._id } as JwtPayloadType;
             next();
         } catch (err) {
             next(err);

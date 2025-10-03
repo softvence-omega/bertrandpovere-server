@@ -16,6 +16,7 @@ const InspectionSchema = new Schema(
         template: { type: Schema.Types.ObjectId, ref: "template", required: true },
         inspector: { type: Schema.Types.ObjectId, ref: "user", required: true },
         questionAdnAnswer: { type: [QuestionAndAnswerSchema], required: true },
+        status: { type: String, enum: ["IN_PROGRESS", "COMPLETED", "DRAFT"], default: "IN_PROGRESS" },
     },
     { timestamps: true, versionKey: false }
 );

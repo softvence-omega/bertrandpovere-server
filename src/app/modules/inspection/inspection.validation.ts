@@ -17,10 +17,12 @@ const QuestionAndAnswerSchema = z.object({
 export const create = z.object({
     template: z.string({ message: "Template is required" }),
     questionAdnAnswer: z.array(QuestionAndAnswerSchema),
+    status: z.enum(["IN_PROGRESS", "COMPLETED", "DRAFT"]).default("IN_PROGRESS"),
 });
 
 export const update = z.object({
     questionAdnAnswer: z.array(QuestionAndAnswerSchema).optional(),
+    status: z.enum(["IN_PROGRESS", "COMPLETED", "DRAFT"]).optional(),
 });
 
 export const inspection_validation = {
