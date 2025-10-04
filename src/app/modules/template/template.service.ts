@@ -2,6 +2,8 @@ import { Request } from "express";
 import { AppError } from "../../utils/app_error";
 import uploadCloud from "../../utils/cloudinary";
 import { isAccountExist } from "../../utils/isAccountExist";
+import { JwtPayloadType } from "../../utils/JWT";
+import { UserModel } from "../user/user.schema";
 import { TTemplate } from "./template.interface";
 import { TemplateModel } from "./template.schema";
 
@@ -57,7 +59,14 @@ const create_new_template_into_db = async (req: Request) => {
 }
 
 const get_all_templates_from_db = async (req: Request) => {
-    const email = req?.user?.email;
+    const { role, accountId, email } = req?.user as JwtPayloadType;
+
+    let isOrgExist;
+    if (role === "ADMIN") {
+        isOrgExist = await isAccountExist(email);
+    } else if (role === "USER") {
+        isOrgExist = await UserModel.findById(accountId as string).lean();
+    }
     const { searchTerm = "", page = 1, limit = 10 } = req.query;
 
     // Ensure page/limit are numbers
@@ -65,10 +74,7 @@ const get_all_templates_from_db = async (req: Request) => {
     const limitNum = Number(limit) || 10;
     const skip = (pageNum - 1) * limitNum;
 
-    // Verify account
-    const isOrgExist = await isAccountExist(email as string);
-    // Build query
-    const query: any = { organization: isOrgExist.organization };
+    const query: any = { organization: isOrgExist?.organization };
     if (searchTerm) {
         query.templateName = { $regex: searchTerm, $options: "i" };
     }
@@ -94,11 +100,17 @@ const get_all_templates_from_db = async (req: Request) => {
     };
 }
 const get_single_template_from_db = async (req: Request) => {
-    const email = req?.user?.email;
     const templateId = req?.params?.templateId;
-    const isOrgExist = await isAccountExist(email as string);
+    const { role, accountId, email } = req?.user as JwtPayloadType;
 
-    const result = await TemplateModel.findOne({ organization: isOrgExist.organization, _id: templateId }).lean();
+    let isOrgExist;
+    if (role === "ADMIN") {
+        isOrgExist = await isAccountExist(email);
+    } else if (role === "USER") {
+        isOrgExist = await UserModel.findById(accountId as string).lean();
+    }
+
+    const result = await TemplateModel.findOne({ organization: isOrgExist?.organization, _id: templateId }).lean();
     if (!result) {
         throw new AppError('Template not found', 404);
     }

@@ -24,9 +24,9 @@ export function setupSocket(_io: Server) {
   io = _io;
 
   io.on("connection", (socket: Socket) => {
-    if (socket.handshake.query?.token) {
-      const verifiedUser = jwtHelpers.verifyToken(
-        socket.handshake.query?.token as string,
+    if ((socket?.handshake?.query?.token as string)?.length > 0) {
+      const verifiedUser = jwtHelpers?.verifyToken(
+        socket?.handshake?.query?.token as string,
         configs.jwt.access_token as string,
       );
       onlineUsersByEmail.set(verifiedUser.email, { userId: verifiedUser.userId, socketId: socket.id });
