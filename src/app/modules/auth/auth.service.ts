@@ -160,8 +160,7 @@ const refresh_token_from_db = async (token: string) => {
     } catch (err) {
         throw new Error('You are not authorized!');
     }
-
-    const userData = await Account_Model.findOne({ email: decodedData.email, status: "ACTIVE", isDeleted: false })
+    const userData = await isAccountExist(decodedData?.email)
 
     const accessToken = jwtHelpers.generateToken(
         {
