@@ -10,7 +10,9 @@ const app = express()
 
 // middleware
 app.use(cors({
-    origin: ["http://localhost:3000"]
+    origin: ["http://localhost:3000", "http://localhost:5173", "http://localhost:5174"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
 }))
 app.use(express.json({ limit: "100mb" }))
 app.use(express.raw())
