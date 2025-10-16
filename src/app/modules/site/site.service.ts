@@ -63,12 +63,12 @@ const get_all_user_sites_from_db = async (req: Request) => {
     const email = req?.user?.email;
     const isOrgExist = await isAccountExist(email as string);
     console.log(isOrgExist)
-    
+
 };
 const get_single_site_from_db = async (req: Request) => {
     const siteId = req?.params?.siteId;
     const data = await SiteModel.findById(siteId)
-        // .populate(["joinedUsers","inspections","actions"])
+        .populate(["joinedUsers", "inspections", "actions"])
         .lean();
     if (!data) {
         throw new AppError('Site not found', 400);
