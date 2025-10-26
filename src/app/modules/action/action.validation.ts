@@ -7,6 +7,11 @@ const create = z.object({
     dueDate: z.string(),
     assignBy: z.array(z.string()).optional(),
     state: z.enum(["To do", "In Progress", "Complete", "can’t do"]).default("To do"),
+    templateInfo:z.object({
+        tempId:z.string(),
+        questionIndex:z.number()
+    }).optional(),
+    inspectionId:z.string().optional()
 });
 const update = z.object({
     actionTitle: z.string().optional(),
@@ -15,6 +20,11 @@ const update = z.object({
     dueDate: z.string().optional(),
     assignBy: z.array(z.string()).optional(),
     state: z.enum(["To do", "In Progress", "Complete", "can’t do"]).optional(),
+     templateInfo:z.object({
+        tempId:z.string(),
+        questionIndex:z.number()
+    }).optional(),
+    inspectionId:z.string().optional()
 });
 
 export const action_validation = {

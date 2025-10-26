@@ -10,6 +10,12 @@ const ActionSchema = new Schema<TAction>(
         dueDate: { type: String, required: true }, // keep as string like your type
         assignBy: { type: [Schema.Types.ObjectId], ref: "user" },
         state: { type: String, enum: ["To do", "In Progress", "Complete", "can’t do"], default: "To do" },
+        templateInfo: {
+            tempId: { type: String, required: false },
+            questionIndex: { type: Number, required: false },
+            required: false
+        },
+        inspectionId: { type: String, required: false },
     },
     { timestamps: true, versionKey: false }
 );

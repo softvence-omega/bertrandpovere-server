@@ -9,4 +9,9 @@ export type TAction = {
     dueDate: string;
     assignBy?: Types.ObjectId[];
     state: "To do" | "In Progress" | "Complete" | "can’t do";
+    templateInfo?: {
+        tempId?: string;
+        questionIndex?: number;
+    };
+    inspectionId?: string;
 }
