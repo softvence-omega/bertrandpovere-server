@@ -11,6 +11,7 @@ const SiteSchema = new Schema<TSite>(
         joinedUsers: [{ type: Schema.Types.ObjectId, ref: "user" }],
         inspections: [{ type: Schema.Types.ObjectId, ref: "inspection" }],
         actions: [{ type: Schema.Types.ObjectId, ref: "action" }],
+        location: { type: String ,required:false},
     },
     { timestamps: true, versionKey: false }
 );

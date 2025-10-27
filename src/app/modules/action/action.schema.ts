@@ -12,8 +12,7 @@ const ActionSchema = new Schema<TAction>(
         state: { type: String, enum: ["To do", "In Progress", "Complete", "can’t do"], default: "To do" },
         templateInfo: {
             tempId: { type: String, required: false },
-            questionIndex: { type: Number, required: false },
-            required: false
+            questionIndex: { type: Number, required: false }
         },
         inspectionId: { type: String, required: false },
     },
