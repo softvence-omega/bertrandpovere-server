@@ -1,9 +1,9 @@
-import express, { Request, Response } from 'express'
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import globalErrorHandler from './app/middlewares/global_error_handler'
-import notFound from './app/middlewares/not_found_api'
-import cookieParser from 'cookie-parser'
-import appRouter from './routes'
+import express, { Request, Response } from 'express';
+import globalErrorHandler from './app/middlewares/global_error_handler';
+import notFound from './app/middlewares/not_found_api';
+import appRouter from './routes';
 
 // define app
 const app = express()
@@ -11,8 +11,8 @@ const app = express()
 // middleware
 app.use(cors({
     origin: [
-        "http://localhost:3000", 
-        "http://localhost:5173", 
+        "http://localhost:3000",
+        "http://localhost:5173",
         "http://localhost:5174",
         "https://mellifluous-selkie-e0d36e.netlify.app"
     ],
@@ -29,7 +29,7 @@ app.use("/api", appRouter)
 app.get('/', (req: Request, res: Response) => {
     res.status(200).json({
         status: 'success',
-        message: 'Welcome to the API Hello',
+        message: 'This is the server home route, working 100%',
         data: null,
     });
 });
