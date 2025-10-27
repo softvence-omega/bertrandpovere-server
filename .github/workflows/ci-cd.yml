@@ -47,5 +47,5 @@ jobs:
           script: |
             cd ~/bertend_server/bertrandpovere-server
             docker system prune -f 
-            docker-compose down
+            docker-compose down bertrandpovere-server-app-1
             docker-compose up -d 

@@ -29,7 +29,7 @@ app.use("/api", appRouter)
 app.get('/', (req: Request, res: Response) => {
     res.status(200).json({
         status: 'success',
-        message: 'This is the starting point, Make a request to /api for all endpoints',
+        message: 'Welcome to the API',
         data: null,
     });
 });
