@@ -46,5 +46,6 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             cd ~/bertend_server/bertrandpovere-server
-            docker-compose down --volumes --remove-orphans  # Safely stop and clean up containers
-            docker-compose up --build -d  # Force rebuild and start the containers
+            docker-compose pull
+            docker-compose up  -d  
+            docker system prune -af
