@@ -1,9 +1,7 @@
 version: '3'
 services:
-  container:
-    image: softvence/bertend_server:latest  # Corrected indentation and added 'image' keyword
   app:
-    build: .
+    image: softvence/bertend_server:latest  # Corrected indentation and added 'image' keyword
     ports:
       - "5000:5000"
     environment:
