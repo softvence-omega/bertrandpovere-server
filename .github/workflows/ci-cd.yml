@@ -52,7 +52,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            cd /home/ubuntu/bertend_server
+            cd /bertend_server/bertrandpovere-server
             docker-compose down
             docker-compose pull
             docker-compose up -d
