@@ -53,6 +53,6 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             cd ~/bertend_server/bertrandpovere-server/
-            docker-compose down
+            docker stop bertrandpovere-server_app_1 && docker rm bertrandpovere-server_app_1
             docker-compose pull
             docker-compose up -d
