@@ -1,11 +1,10 @@
-version: '3'
 services:
   app:
-    image: softvence/bertend_server:latest  # Corrected indentation and added 'image' keyword
+    image: softvence/bertend_server:latest
     ports:
       - "5000:5000"
-    environment:
-      - .env
+    env_file:
+      - .env 
     depends_on:
       - mongo
     networks:

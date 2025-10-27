@@ -46,6 +46,6 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             cd ~/bertend_server/bertrandpovere-server
-            docker-compose pull  # Pull the latest image
-            docker-compose up -d  # Start the new container with the updated image
-            docker system prune -f
+            docker system prune -f 
+            docker-compose down
+            docker-compose up --build -d 
