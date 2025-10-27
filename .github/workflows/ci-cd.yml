@@ -16,16 +16,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
- 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -33,16 +30,13 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-
       - name: Build Docker image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/bertend_server:latest .
 
-
       - name: Push Docker image
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/bertend_server:latest
-
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.5
@@ -52,6 +46,5 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             cd ~/bertend_server/bertrandpovere-server
-            docker stop bertrandpovere-server_app_1 || true && docker rm bertrandpovere-server_app_1 || true
-            docker-compose pull
-            docker-compose up -d
+            docker-compose pull  # Pull the latest image
+            docker-compose up -d  # Start the new container with the updated image
