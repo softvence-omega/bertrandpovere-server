@@ -1,0 +1,29 @@
+version: '3'
+services:
+  # Express app container
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - .env
+    depends_on:
+      - mongo
+    networks:
+      - backend
+
+  # MongoDB container
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - backend
+
+volumes:
+  mongo-data:
+
+networks:
+  backend:
+    driver: bridge
