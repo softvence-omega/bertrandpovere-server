@@ -48,3 +48,4 @@ jobs:
             cd ~/bertend_server/bertrandpovere-server
             docker-compose pull  # Pull the latest image
             docker-compose up -d  # Start the new container with the updated image
+            docker system prune -f
