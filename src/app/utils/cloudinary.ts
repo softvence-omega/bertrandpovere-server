@@ -3,6 +3,7 @@ import { Upload } from '@aws-sdk/lib-storage';
 import fs from 'fs';
 import mime from 'mime-types';
 import path from 'path';
+import { configs } from '../configs';
 
 type IFile = {
     fieldname: string;
@@ -15,10 +16,10 @@ type IFile = {
     size: number;
 }; // Create the S3 client
 const s3 = new S3({
-    region: 'eu-north-1',
+    region: configs.aws.region as string,
     credentials: {
-        accessKeyId: "AKIAZW42B4Y3WMKVJKOM",
-        secretAccessKey: "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",
+        accessKeyId: configs.aws.access_key_id as string,
+        secretAccessKey: configs.aws.secret_access_key as string,
     },
 });
 
@@ -34,7 +35,7 @@ const uploadCloud = async (
     const upload = new Upload({
         client: s3,
         params: {
-            Bucket: 'bertent-autit-site',
+            Bucket: configs.aws.bucket as string,
             Key: fileName,
             Body: fileContent,
             ContentType: contentType,
