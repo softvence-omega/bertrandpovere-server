@@ -48,4 +48,4 @@ jobs:
             cd ~/bertend_server/bertrandpovere-server
             docker system prune -f 
             docker-compose down
-            docker-compose up --build -d 
+            docker-compose up -d 
