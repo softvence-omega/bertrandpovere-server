@@ -1,6 +1,7 @@
 version: '3'
 services:
-  # Express app container
+  container:
+    image: softvence/bertend_server:latest  # Corrected indentation and added 'image' keyword
   app:
     build: .
     ports:
