@@ -29,7 +29,7 @@ app.use("/api", appRouter)
 app.get('/', (req: Request, res: Response) => {
     res.status(200).json({
         status: 'success',
-        message: 'Welcome to the API, Hurray 😎😎😎',
+        message: 'Welcome to the API, Hurray 😎😎😎 huhuhhjfd',
         data: null,
     });
 });
