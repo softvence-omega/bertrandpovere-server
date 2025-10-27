@@ -1,10 +1,12 @@
+version: '3'
+
 services:
   app:
     image: softvence/bertend_server:latest
     ports:
       - "5000:5000"
     env_file:
-      - .env 
+      - .env
     depends_on:
       - mongo
     networks:
