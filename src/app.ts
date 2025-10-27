@@ -29,7 +29,7 @@ app.use("/api", appRouter)
 app.get('/', (req: Request, res: Response) => {
     res.status(200).json({
         status: 'success',
-        message: 'Hello now successfully added ci cd on this server',
+        message: 'Welcome to the API',
         data: null,
     });
 });
