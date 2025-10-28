@@ -1,7 +1,6 @@
 import { Types } from "mongoose";
 import { z } from "zod";
 
-const ObjectId = z.instanceof(Types.ObjectId);
 
 const AnswerTypeSchema = z.discriminatedUnion("answerType", [
     z.object({ answerType: z.literal("input"), value: z.enum(["text", "email", "number"]) }),
@@ -66,7 +65,7 @@ const create = z.object({
     access: z
         .array(
             z.object({
-                userId: ObjectId,
+                userId: z.string(),
                 role: z.enum(["viewer", "editor", "owner"]),
             })
         )
