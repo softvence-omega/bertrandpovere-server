@@ -16,29 +16,71 @@ const save_new_inspection_into_db = async (req: Request) => {
 };
 
 const update_inspection_into_db = async (req: Request) => {
-    const { question, answer, note, mediaFiles, status } = req.body;
+    const { status, ...payload } = req.body;
+    const inspectionId = req.params.inspectionId;
 
-    // build update object dynamically
-    const updateData: any = {
-        "questionAdnAnswer.$.answer": answer,
-        "questionAdnAnswer.$.note": note,
-        "questionAdnAnswer.$.mediaFiles": mediaFiles,
-    };
-
-    if (status) {
-        updateData.status = status;
+    // Basic validation
+    if (!payload?.question) {
+        throw new Error("Question is required");
     }
-    let result = await InspectionModel.findOneAndUpdate(
-        {
-            _id: req.params.inspectionId,
-            "questionAdnAnswer.question": question,
-        },
-        { $set: updateData },
-        { new: true }
+
+    // 1️⃣ Check if inspection exists
+    const inspection = await InspectionModel.findById(inspectionId);
+    if (!inspection) {
+        throw new Error("Inspection not found");
+    }
+
+    // 2️⃣ Find if question already exists
+    const existingIndex = inspection.questionAdnAnswer.findIndex(
+        (item) => item.question === payload.question
     );
 
-    return result;
+    let updatedInspection;
+if (existingIndex !== -1) {
+        // 🟢 Update existing question’s answer/note/mediaFiles
+        const updateQuery: Record<string, any> = {};
+        if (payload.answer !== undefined) {
+            updateQuery[`questionAdnAnswer.${existingIndex}.answer`] = payload.answer;
+        }
+        if (payload.note !== undefined) {
+            updateQuery[`questionAdnAnswer.${existingIndex}.note`] = payload.note;
+        }
+        if (payload.media !== undefined) {
+            updateQuery[`questionAdnAnswer.${existingIndex}.mediaFiles`] = payload.media;
+        }
+
+        updatedInspection = await InspectionModel.findByIdAndUpdate(
+            inspectionId,
+            {
+                $set: {
+                    ...updateQuery,
+                    ...(status ? { status } : {}),
+                },
+            },
+            { new: true }
+        );
+    } else {
+        // 🔵 Push new question object if it doesn’t exist
+        updatedInspection = await InspectionModel.findByIdAndUpdate(
+            inspectionId,
+            {
+                $push: {
+                    questionAdnAnswer: {
+                        question: payload.question,
+                        answer: payload.answer || "",
+                        note: payload.note || "",
+                        mediaFiles: payload.media || [],
+                    },
+                },
+                ...(status ? { $set: { status } } : {}),
+            },
+            { new: true }
+        );
+    }
+
+    return updatedInspection;
 };
+
 
 
 
