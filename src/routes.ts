@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import actionRouter from './app/modules/action/action.route';
+import aiRouter from './app/modules/ai/ai.route';
 import authRoute from './app/modules/auth/auth.route';
 import awsRouter from './app/modules/aws/aws.route';
 import groupRouter from './app/modules/group/group.route';
@@ -22,7 +23,8 @@ const moduleRoutes = [
     { path: '/action', route: actionRouter },
     { path: '/template', route: templateRouter },
     { path: "/inspection", route: inspectionRouter },
-    { path: "/aws", route: awsRouter }
+    { path: "/aws", route: awsRouter },
+    { path: "/ai", route: aiRouter }
 
 ];
 

@@ -30,5 +30,6 @@ export const configs = {
         secret_access_key: process.env.AWS_ACCESS_SECRET,
         region: process.env.AWS_REGION,
         bucket: process.env.AWS_BUCKET
-    }
+    },
+    ai_end_point: process.env.AI_API_END_POINT as string
 }
