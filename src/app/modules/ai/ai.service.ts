@@ -2,6 +2,8 @@ import { Request } from "express";
 import fs from "fs";
 import { configs } from "../../configs";
 import { AppError } from "../../utils/app_error";
+import { isAccountExist } from "../../utils/isAccountExist";
+import { TemplateModel } from "../template/template.schema";
 
 
 const extract_text_from_ai = async (req: Request) => {
@@ -27,7 +29,7 @@ const extract_text_from_ai = async (req: Request) => {
 
 const generate_survey_by_ai = async (req: Request) => {
     const body = req?.body;
-    console.log(body)
+    const userExist = await isAccountExist(req?.user?.email as string)
     const aiRes = await fetch(`${configs.ai_end_point}/generate-survey`, {
         method: "POST",
         body: JSON.stringify(body),
@@ -36,9 +38,16 @@ const generate_survey_by_ai = async (req: Request) => {
         }
     })
 
-    return await aiRes.json();
+    const parse = await aiRes.json();
+    const payload = {
+        ...parse?.data,
+        organization: userExist?.organization
+    }
+    const res = await TemplateModel.create(payload)
+    return res
 }
 const generate_survey_from_pdf_by_ai = async (req: Request) => {
+    const userExist = await isAccountExist(req?.user?.email as string)
     const file = req?.file;
     if (!file) {
         throw new AppError("File is required", 400);
@@ -53,7 +62,13 @@ const generate_survey_from_pdf_by_ai = async (req: Request) => {
     });
     const resultText = await aiResponse.text();
     try {
-        return JSON.parse(resultText);
+        const parse = JSON.parse(resultText);
+        const payload = {
+            ...parse?.data,
+            organization: userExist?.organization
+        }
+        const res = await TemplateModel.create(payload)
+        return res
     } catch {
         return resultText;
     }
