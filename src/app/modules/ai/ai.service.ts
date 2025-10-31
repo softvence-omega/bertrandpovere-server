@@ -35,7 +35,8 @@ const generate_survey_by_ai = async (req: Request) => {
         body: JSON.stringify(body),
         headers: {
             "Content-Type": "application/json"
-        }
+        },
+        signal: AbortSignal.timeout(25000)
     })
 
     const parse = await aiRes.json();
