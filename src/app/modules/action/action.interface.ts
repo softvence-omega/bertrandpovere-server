@@ -14,4 +14,9 @@ export type TAction = {
         questionIndex?: number;
     };
     inspectionId?: string;
+    mediaFiles?: string[];
+    messages?:{
+        message:string,
+        sender:Types.ObjectId
+    }[]
 }

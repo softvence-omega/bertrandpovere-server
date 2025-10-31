@@ -1,6 +1,11 @@
 import { Schema, model } from "mongoose";
 import { TAction } from "./action.interface";
 
+const messageSchema = new Schema({
+    message: { type: String },
+    sender: { type: String }
+});
+
 const ActionSchema = new Schema<TAction>(
     {
         author: { type: Schema.Types.ObjectId, ref: "Account", required: true },
@@ -15,6 +20,8 @@ const ActionSchema = new Schema<TAction>(
             questionIndex: { type: Number, required: false }
         },
         inspectionId: { type: String, required: false },
+        mediaFiles: { type: [String], required: false },
+        messages: { type: [messageSchema], required: false },
     },
     { timestamps: true, versionKey: false }
 );

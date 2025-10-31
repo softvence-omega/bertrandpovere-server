@@ -24,7 +24,9 @@ const update = z.object({
         tempId:z.string(),
         questionIndex:z.number()
     }).optional(),
-    inspectionId:z.string().optional()
+    inspectionId:z.string().optional(),
+    mediaFiles: z.array(z.string()).optional(),
+    messages:z.array(z.object({message:z.string(),sender:z.string()})).optional(),
 });
 
 export const action_validation = {
