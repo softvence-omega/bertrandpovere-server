@@ -29,23 +29,31 @@ const extract_text_from_ai = async (req: Request) => {
 
 const generate_survey_by_ai = async (req: Request) => {
     const body = req?.body;
-    const userExist = await isAccountExist(req?.user?.email as string)
-    const aiRes = await fetch(`${configs.ai_end_point}/generate-survey`, {
-        method: "POST",
-        body: JSON.stringify(body),
-        headers: {
-            "Content-Type": "application/json"
-        },
-        signal: AbortSignal.timeout(25000)
-    })
+    const userExist = await isAccountExist(req?.user?.email as string);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 120_000); // 2 min
 
-    const parse = await aiRes.json();
-    const payload = {
-        ...parse?.data,
-        organization: userExist?.organization
+    try {
+        const aiRes = await fetch(`${configs.ai_end_point}/generate-survey`, {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: { "Content-Type": "application/json" },
+            signal: controller.signal
+        });
+        const parse = await aiRes.json();
+        const payload = {
+            ...parse?.data,
+            organization: userExist?.organization
+        };
+        const res = await TemplateModel.create(payload);
+        return res;
+    } catch (err) {
+        console.error("AI fetch failed:", err);
+        throw err;
+    } finally {
+        clearTimeout(timeout);
     }
-    const res = await TemplateModel.create(payload)
-    return res
+
 }
 const generate_survey_from_pdf_by_ai = async (req: Request) => {
     const userExist = await isAccountExist(req?.user?.email as string)
