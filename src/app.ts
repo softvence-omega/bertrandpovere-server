@@ -15,7 +15,9 @@ app.use(cors({
         "http://localhost:5173",
         "http://localhost:5174",
         "https://mellifluous-selkie-e0d36e.netlify.app",
-        "https://main.d1yhx6z9xvjtzi.amplifyapp.com"
+        "https://main.d1yhx6z9xvjtzi.amplifyapp.com",
+        "https://globalriskcore.com",
+        "https://www.globalriskcore.com"
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
