@@ -83,7 +83,7 @@ const update_site_information_into_db = async (req: Request) => {
     const siteId = req?.params?.siteId;
     const isOrgExist = await isAccountExist(email as string);
     const payload: Partial<TSite> = {
-        siteName: req?.body?.siteName
+        ...req?.body
     }
     if (req?.file) {
         const uploadedFile = await uploadCloud(req?.file);
